@@ -1,0 +1,30 @@
+menu "ESP32-S31 comprehensive test"
+
+choice S31_TEST_MODE
+    prompt "Test mode"
+    default S31_TEST_FULL
+    help
+        The full mode uses the LVGL LCD dashboard. USB Host mode is separated
+        so the USB connect/disconnect result can be checked from serial logs.
+        ESP32-S31 USB D+/D- are dedicated USB_DP/USB_DM package pins 44/45,
+        not GPIO40/GPIO41.
+
+config S31_TEST_FULL
+    bool "Full board test with USB Host monitor"
+
+config S31_TEST_USB_HOST_ONLY
+    bool "USB Host only, serial log view"
+
+endchoice
+
+config S31_TEST_ENABLE_SPEAKER_TONE
+    bool "Play speaker test tone in full mode"
+    default y
+    depends on S31_TEST_FULL
+
+config S31_TEST_ENABLE_WIFI_SCAN
+    bool "Run WiFi scan in full mode"
+    default y
+    depends on S31_TEST_FULL
+
+endmenu

@@ -1,93 +1,99 @@
-# ESP32-S31-Touch-LCD-4.3C
+# Waveshare ESP32-S31-Touch-LCD-4.3C
 
+[简体中文](README_ZH.md)
 
+The **ESP32-S31-Touch-LCD-4.3C** is a 4.3-inch human-machine interface development board built around the ESP32-S31. It combines an 800 x 480 capacitive touch display with audio, motion sensing, battery monitoring, TF card storage, RTC, RS485, CAN-FD, and USB host connectivity.
 
-## Getting started
+This repository contains ESP-IDF examples, the board definition used by the examples, hardware drawings, and a full-flash test image.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+![ESP32-S31-Touch-LCD-4.3C](assets/Product-1.webp)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Hardware at a glance
 
-## Add your files
+| Function | Hardware |
+| --- | --- |
+| MCU | ESP32-S31, dual-core RISC-V, up to 320 MHz |
+| Display | 4.3-inch, 800 x 480, 16-bit RGB565 interface |
+| Touch | GT911 capacitive touch controller |
+| Audio | ES8389 codec, microphone input, and speaker amplifier |
+| Storage | TF card over SDMMC |
+| Sensors | QMI8658 IMU and BQ27220 battery gauge |
+| Timekeeping | PCF85063ATL RTC |
+| Industrial interfaces | Half-duplex RS485 and CAN-FD |
+| Expansion | USB host and exposed board connectors |
 
-* [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+See [Hardware Reference](HARDWARE_REFERENCE.md) for the verified pin map, I2C addresses, and source notes. The source PDFs and CAD files are under [`hardware/`](hardware/).
 
+## Software support
+
+The repository currently contains **16 ESP-IDF projects** and no Arduino examples. ESP32-S31 framework support is still evolving: use an ESP-IDF revision that actually lists `esp32s31` as a supported target. The component manifests in these examples currently require ESP-IDF `>=6.2`.
+
+Before choosing a framework revision, check Espressif's [ESP32-S31 support status](https://developer.espressif.com/hardware/esp32s31/). Stable ESP-IDF 5.5 and 6.0 releases, and the current stable Arduino-ESP32 release, do not provide an ESP32-S31 build target, so this repository does not claim support for them.
+
+### Build an example
+
+Install and export a compatible ESP-IDF environment, then run the following from an example directory:
+
+```text
+cd examples/esp-idf/1_i2c_scan
+idf.py set-target esp32s31
+idf.py bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py build
+idf.py -p PORT flash monitor
 ```
-cd existing_repo
-git remote add origin http://192.168.1.91/shiwei/esp32-s31-touch-lcd-4.3c.git
-git branch -M main
-git push -uf origin main
+
+Replace `PORT` with the board's serial port. `idf.py bmgr` reads the local `esp32_s31_touch_lcd_4_3c` board definition and generates the Board Manager initialization component. See the selected example's README for its hardware-specific behavior.
+
+## Examples
+
+| # | Example | Purpose |
+| ---: | --- | --- |
+| 1 | [`1_i2c_scan`](examples/esp-idf/1_i2c_scan/) | Scan the on-board I2C bus |
+| 2 | [`2_rtc_pcf85063atl`](examples/esp-idf/2_rtc_pcf85063atl/) | Read and set the RTC |
+| 3 | [`3_imu_qmi8658`](examples/esp-idf/3_imu_qmi8658/) | Read accelerometer and gyroscope data |
+| 4 | [`4_bat_bq27220`](examples/esp-idf/4_bat_bq27220/) | Read battery-gauge information |
+| 5 | [`5_tf_card`](examples/esp-idf/5_tf_card/) | Mount and access a TF card |
+| 6 | [`6_codec_mic_raw`](examples/esp-idf/6_codec_mic_raw/) | Capture raw microphone samples through ES8389 |
+| 7 | [`7_codec_sd_wav_player`](examples/esp-idf/7_codec_sd_wav_player/) | Play a WAV file from a TF card |
+| 8 | [`8_rs485`](examples/esp-idf/8_rs485/) | Exercise the half-duplex RS485 interface |
+| 9 | [`9_canfd`](examples/esp-idf/9_canfd/) | Send and receive CAN-FD frames |
+| 10 | [`10_usb_host`](examples/esp-idf/10_usb_host/) | Enumerate an external USB device |
+| 11 | [`11_rgb_lcd`](examples/esp-idf/11_rgb_lcd/) | Drive the 800 x 480 RGB LCD |
+| 12 | [`12_touch`](examples/esp-idf/12_touch/) | Read GT911 touch input |
+| 13 | [`13_comprehensive_test`](examples/esp-idf/13_comprehensive_test/) | Exercise the board's integrated peripherals |
+| 14 | [`14_lvgl_porting`](examples/esp-idf/14_lvgl_porting/) | Run an LVGL display and touch demo |
+| 15 | [`15_bluetooth_speaker`](examples/esp-idf/15_bluetooth_speaker/) | Receive Bluetooth A2DP audio and show an LVGL player UI |
+| 16 | [`16_usb_camera`](examples/esp-idf/16_usb_camera/) | Display video from an external USB UVC camera |
+
+The USB camera example does not imply an on-board camera; this board has no DVP camera interface. For implementation details and migration notes, see the [ESP-IDF example index](examples/esp-idf/README.md).
+
+## Test firmware
+
+[`firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin`](firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin) is a 16 MB full-flash **test image** supplied with this repository. It is kept separate from source-built example artifacts and is not described as factory or recovery firmware. Read [`firmware/README.md`](firmware/README.md) before flashing it because writing a full-flash image replaces the contents of the target flash.
+
+## Repository layout
+
+```text
+assets/              Product images
+config/              Shared configuration guidance
+docs/                Repository, component, CI, and firmware notes
+examples/esp-idf/    Standalone ESP-IDF projects
+firmware/            Supplied full-flash test image
+hardware/            Schematics and mechanical files
+releases/            Source-built firmware packaging tools
+scripts/             Repository discovery and validation helpers
 ```
 
-## Integrate with your tools
+Additional documentation:
 
-* [Set up project integrations](http://192.168.1.91/shiwei/esp32-s31-touch-lcd-4.3c/-/settings/integrations)
-
-## Collaborate with your team
-
-* [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+- [Repository structure](docs/repository-structure.md)
+- [Component layout](docs/components.md)
+- [Firmware policy](docs/firmware.md)
+- [CI scope](docs/ci.md)
+- [Contributing](CONTRIBUTING.md)
+- [Support](SUPPORT.md)
+- [Security policy](SECURITY.md)
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Unless a subdirectory or third-party component states otherwise, this repository is distributed under the [Apache License 2.0](LICENSE). Bundled third-party components and media retain their own license notices.
