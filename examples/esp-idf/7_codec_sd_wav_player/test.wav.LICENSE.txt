@@ -1,0 +1,7 @@
+SPDX-License-Identifier: CC0-1.0
+
+test.wav is an original diagnostic signal generated entirely from mathematical
+sine waves by generate_test_wav.py. It contains no third-party music, speech,
+recordings, samples or other source media.
+
+The generated test signal is made available under CC0-1.0.

@@ -1,0 +1,20 @@
+menu "ESP32-S31 LVGL 9 porting demo"
+
+config S31_LVGL_DEMO_VIDEO_FPS
+    int "Generated video FPS"
+    range 15 60
+    default 30
+    help
+        Frame rate used by the synthetic RGB565 video surface. 30 FPS is a
+        practical default for keeping the LVGL UI responsive while stressing
+        PSRAM bandwidth on the RGB panel.
+
+config S31_LVGL_DEMO_ENABLE_PPA
+    bool "Enable esp_lvgl_adapter PPA acceleration"
+    default y
+    help
+        Enables the PPA path in esp_lvgl_adapter when the selected IDF target
+        provides it. This is intended to push the ESP32-S31 display pipeline
+        harder for image blending and screen composition.
+
+endmenu

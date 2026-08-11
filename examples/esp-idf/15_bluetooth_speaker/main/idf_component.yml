@@ -1,0 +1,16 @@
+dependencies:
+  idf:
+    version: ">=6.2"
+  espressif/esp_board_manager:
+    version: ">=0.6.1"
+  espressif/esp_lvgl_adapter:
+    version: "^0.5.1"
+  78/xiaozhi-fonts: ~1.5.5
+  bt_app_core_utils:
+    path: ${IDF_PATH}/examples/bluetooth/bluedroid/classic_bt/common/bt_app_core_utils
+  bredr_app_common_utils:
+    path: ${IDF_PATH}/examples/bluetooth/bluedroid/classic_bt/common/bredr_app_common_utils
+  a2dp_sink_common_utils:
+    path: ${IDF_PATH}/examples/bluetooth/bluedroid/classic_bt/common/a2dp_utils/a2dp_sink_common_utils
+  a2dp_sink_ext_codec_utils:
+    path: ${IDF_PATH}/examples/bluetooth/bluedroid/classic_bt/common/a2dp_utils/a2dp_sink_ext_codec_utils
