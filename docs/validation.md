@@ -97,5 +97,6 @@ toolchain. Each generated `gen_board_device_config.c` was checked for
 `.bus_width = 4`. The builds were isolated from the product checkout.
 The updated board definition must be included in the published
 `waveshare/waveshare_boards` package used by these examples.
-No 4-bit card initialization, read/write or audio playback test was performed
-on a physical board.
+The user subsequently confirmed successful hardware testing, including the
+4-bit SDMMC change. This confirmation is separate from the automated build
+validation recorded above.

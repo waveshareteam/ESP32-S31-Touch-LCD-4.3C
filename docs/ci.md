@@ -24,7 +24,7 @@ to modify an already published version. A fresh public asset download is also
 checked after publication. Releases contain 16 firmware ZIPs and `SHA256SUMS`;
 the checked-in full-flash test image is not republished as generated firmware.
 
-## Pinned experimental toolchain
+## Pinned toolchain
 
 [`releases/config.json`](../releases/config.json) records the exact ESP-IDF
 commit, Component Manager version, board identifier and component constraints.
@@ -32,12 +32,9 @@ The build script checks the active toolchain against this configuration.
 The managed `waveshare/waveshare_boards` package must already contain the board.
 There is no per-project board copy or CI fallback definition.
 
-The [official ESP32-S31 status page](https://developer.espressif.com/hardware/esp32s31/)
-still directs developers to preview support. ESP-IDF v6.1 lists `esp32s31` among
-`PREVIEW_TARGETS`, while these examples require `>=6.2`. This workflow uses the
-previously verified development commit recorded in the configuration, enables
-`--preview` explicitly, labels builds experimental and marks Releases as
-prereleases. It does not claim a stable framework or hardware-validation matrix.
+The examples require ESP-IDF `>=6.2`. This workflow uses the verified ESP-IDF
+commit recorded in the configuration. Product Releases are published as
+regular releases and marked Latest.
 
 Each firmware manifest records its source commit, exact framework commit,
 resolved registry dependency versions/hashes and board-definition file hashes.

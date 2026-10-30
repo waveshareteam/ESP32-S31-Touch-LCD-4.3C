@@ -67,10 +67,9 @@ generated dependencies may differ.
 
 ## Toolchain Boundary
 
-ESP32-S31 is a preview target. The `esp32s31` setting in project files does not
-make an arbitrary stable ESP-IDF release support the chip. Builds and CI must
-use an explicitly supported preview package or pinned commit and record its
-exact identity. Any preview CI job should be labeled experimental.
+Builds and CI use the ESP-IDF commit recorded in
+[`releases/config.json`](../releases/config.json). The build script verifies
+the active framework commit and records its exact identity in each package.
 
 ## Firmware Boundary
 

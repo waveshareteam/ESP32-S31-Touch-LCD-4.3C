@@ -139,7 +139,7 @@ def validate_set(directory: Path, commit: str, version: str = "", selector: str 
         row = expected[path.name]
         identity = {"git_sha": commit, "project_path": row["path"], "target": row["target"],
                     "release_version": version, **{k: cfg[k] for k in (
-                        "framework_version", "framework_commit", "component_manager_version", "experimental", "board")}}
+                        "framework_version", "framework_commit", "component_manager_version", "board")}}
         if any(manifest.get(k) != v for k, v in identity.items()):
             raise ValueError("Stale commit, wrong project/version or framework mismatch")
         resolved = manifest["resolved_dependencies"]

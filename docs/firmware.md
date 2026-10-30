@@ -37,7 +37,7 @@ segments, and a combined image. See `releases/README.md`.
 Source-built archives must identify:
 
 - example path,
-- exact ESP-IDF preview package, tag, or commit,
+- exact ESP-IDF package, tag, or commit,
 - target `esp32s31`,
 - repository commit,
 - flash offsets and files,
@@ -47,9 +47,8 @@ CI artifacts validate the source revision that produced them. They do not
 replace the checked-in test image and must not be described as factory
 firmware.
 
-## Preview Toolchain Limitation
+## Toolchain Requirements
 
-Do not copy the stable ESP32-S3 build matrix or Arduino packaging commands from
-another product repository. ESP32-S31 is a preview target, and this repository
-has no Arduino sketches. Package firmware only after the selected ESP-IDF and
-flashing tools have explicitly passed the `esp32s31` support gate.
+Use ESP-IDF and flashing tools that support `esp32s31`. Record their exact
+versions with the firmware package. This repository contains ESP-IDF examples
+and has no Arduino sketches.

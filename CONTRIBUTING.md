@@ -4,10 +4,9 @@ Thank you for improving the ESP32-S31-Touch-LCD-4.3C repository.
 
 ## Before You Start
 
-ESP32-S31 support is currently tied to a preview ESP-IDF toolchain. Do not
-assume that a stock stable ESP-IDF release, container, or `esptool` package
-supports the `esp32s31` target. Record the exact toolchain version or commit
-used for every build result.
+Use an ESP-IDF toolchain and flashing tools that support the `esp32s31`
+target. Record the exact toolchain version or commit used for every build
+result.
 
 For changes that affect pins, clocks, buses, power control, display timing,
 touch, audio, storage, USB, RS485, or CAN-FD, verify the change against the
@@ -25,7 +24,7 @@ documentation.
    idf.py bmgr -b esp32_s31_touch_lcd_4_3c
    ```
 
-4. Build with an ESP-IDF preview package or commit that explicitly supports
+4. Build with an ESP-IDF package or commit that explicitly supports
    `esp32s31`.
 5. Test hardware-facing changes on an ESP32-S31-Touch-LCD-4.3C and record the
    board revision when known.

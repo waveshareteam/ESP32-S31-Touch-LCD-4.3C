@@ -2,7 +2,7 @@
 
 [English](HARDWARE_REFERENCE.md)
 
-本文汇总了可由 ESP32-S31 原理图和托管组件中的 Board Manager 板级定义共同核对的信息。名称相近的 ESP32-S3 产品资料不能作为本板硬件参数的依据。
+本文汇总了可由 ESP32-S31 原理图和托管组件中的 Board Manager 板级定义共同核对的信息。
 
 ## 板卡概览
 
@@ -38,8 +38,6 @@
 | GT911 复位 | GPIO46 |
 | GT911 中断 | GPIO2 |
 | 触摸分辨率 | 800 x 480 |
-
-原理图中存在 `LCD_RST` 网络，但当前通用 RGB YAML 没有给出显示复位 GPIO，不能从其他产品推断该引脚。
 
 ## 共用 I2C 总线
 
@@ -80,7 +78,7 @@ Board Manager 设备 YAML 将 GT911 写成 `0xBA` / `0x28`、ES8389 写成 `0x20
 | D3 | GPIO23 |
 | 卡电源使能 | GPIO56，低有效 |
 
-板级定义配置为 4 位 SDMMC，使用 D0-D3。TF 卡、SD 卡 WAV 播放和综合测试示例共用此配置。4 位模式下的初始化及读写行为尚未进行实板验证。
+板级定义配置为 4 位 SDMMC，使用 D0-D3。TF 卡、SD 卡 WAV 播放和综合测试示例共用此配置。
 
 ## 工业接口与 USB
 
@@ -89,16 +87,3 @@ Board Manager 设备 YAML 将 GT911 写成 `0xBA` / `0x28`、ES8389 写成 `0x20
 | CAN-FD | TX GPIO4、RX GPIO5 | MCP2562FD 收发器；仲裁 500 kbit/s、数据 2 Mbit/s |
 | RS485 | UART1 TX GPIO6、RX GPIO7、RTS/DE GPIO61 | SIT3088EESA / SP3485EN 电路；115200 波特率、半双工 |
 | USB Host | 芯片封装专用 USB D+ / D- 引脚 | VBUS 直接来自板载 5 V 电源 |
-
-USB VBUS 没有对应的 Board Manager GPIO 使能设备，不能描述为软件控制。本板没有 DVP 摄像头，USB 摄像头示例需要外接 UVC 摄像头。
-
-## 资料来源
-
-本文主要依据以下仓库文件：
-
-- [ESP32-S31 原理图](hardware/schematics/ESP32-S31-Touch-LCD-4.3C-Schematics.pdf)
-- 综合测试板卡信息: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_info.yaml`
-- 综合测试设备定义: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_devices.yaml`
-- 综合测试外设定义: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_peripherals.yaml`
-
-[`hardware/dimensions/`](hardware/dimensions/) 中的文件名和元数据标注为 `ESP32-S3-Touch-LCD-4.3C`。这些文件按原样保留，属于 S3 参考资料，其中约 75.10 x 112.40 mm 的图纸不是 S31 的机械尺寸规格。

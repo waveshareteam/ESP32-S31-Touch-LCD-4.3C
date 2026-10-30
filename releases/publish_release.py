@@ -93,7 +93,7 @@ def publish(api: GitHub, directory: Path, tag: str, commit: str) -> dict:
             "a manifest, checksums and Bash/Windows flash helpers.\n\n"
             f"ESP-IDF: `{cfg['framework_version']}` (`{cfg['framework_commit']}`).\n"
             f"Managed board package: `waveshare/waveshare_boards {board}`.\n\n"
-            "ESP32-S31 support uses a pinned preview toolchain. "
+            "ESP32-S31 builds use the pinned ESP-IDF toolchain. "
             "Compilation and archive checks do not establish physical-board functionality.\n\n"
             "Download the ZIP named for your example; GitHub's Source code archives contain source only.")
     try:
@@ -103,7 +103,7 @@ def publish(api: GitHub, directory: Path, tag: str, commit: str) -> dict:
             raise
         release = api.call("/releases", "POST", {
             "tag_name": tag, "target_commitish": commit, "name": tag, "body": body,
-            "draft": True, "prerelease": cfg["experimental"]})
+            "draft": True, "prerelease": False})
     else:
         if not release["draft"]:
             raise ValueError("Public Release already exists; issue a new patch version instead")
@@ -111,7 +111,7 @@ def publish(api: GitHub, directory: Path, tag: str, commit: str) -> dict:
         for asset in api.assets(release["id"]):
             api.call(f"/releases/assets/{asset['id']}", "DELETE")
         api.call(f"/releases/{release['id']}", "PATCH", {
-            "body": body, "name": tag, "prerelease": cfg["experimental"]})
+            "body": body, "name": tag, "prerelease": False})
     release_id = release["id"]
     payloads = {p.name: p.read_bytes() for p in files}
     payloads["SHA256SUMS"] = "".join(
@@ -126,13 +126,13 @@ def publish(api: GitHub, directory: Path, tag: str, commit: str) -> dict:
     if not api.call(f"/releases/{release_id}")["draft"]:
         raise ValueError("Release was published outside the workflow")
     published = api.call(f"/releases/{release_id}", "PATCH", {
-        "draft": False, "prerelease": cfg["experimental"],
-        "make_latest": "false" if cfg["experimental"] else "true"})
-    if published["draft"] or published["tag_name"] != tag or published["prerelease"] != cfg["experimental"]:
+        "draft": False, "prerelease": False,
+        "make_latest": "true"})
+    if published["draft"] or published["tag_name"] != tag or published["prerelease"] is not False:
         raise ValueError("Published Release metadata mismatch")
     # Verify public metadata and a fresh asset download independently of upload.
     public = api.call(f"/releases/tags/{tag}", public=True)
-    if public["draft"] or public["tag_name"] != tag or public["prerelease"] != cfg["experimental"]:
+    if public["draft"] or public["tag_name"] != tag or public["prerelease"] is not False:
         raise ValueError("Public Release metadata mismatch")
     assets = api.assets(release_id, public=True)
     verify_assets(assets, expected)

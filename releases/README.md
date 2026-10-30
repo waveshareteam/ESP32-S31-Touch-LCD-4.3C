@@ -28,8 +28,7 @@ git push origin v1.0.0
 
 Here `origin` must reach GitHub, directly or through a GitLab mirror that syncs
 tags. A tag that exists only on GitLab does not trigger GitHub Actions. After
-the tag reaches GitHub, open **Actions → ESP32-S31 firmware and releases
-(experimental)** to follow the build, then download your example ZIP from
+the tag reaches GitHub, open **Actions → ESP32-S31 firmware and releases** to follow the build, then download your example ZIP from
 **Releases**. Do not create a public Release manually before the workflow runs.
 
 Only annotated `vMAJOR.MINOR.PATCH` tags on commits reachable from the default
@@ -39,10 +38,10 @@ draft first; remote asset names, sizes and digests are checked before publishing
 A failed draft can be retried using **Re-run failed jobs**. An existing public
 Release cannot be replaced; publish a new patch tag instead.
 
-ESP32-S31 currently uses the pinned preview framework in
-[`config.json`](config.json). Releases are therefore marked **Pre-release**,
-even when their product tag uses ordinary SemVer. Version tags, framework
-commits and resolved component versions are recorded separately in manifests.
+ESP32-S31 currently uses the pinned ESP-IDF framework in
+[`config.json`](config.json). Product versions are published as regular
+Releases with **Latest** enabled. Version tags, framework commits and resolved
+component versions are recorded separately in manifests.
 The board package keeps the projects' `"*"` version policy; all matrix jobs must
 resolve the same component versions and board-definition hashes. Other release
 pins are recorded in `config.json`.
@@ -100,7 +99,7 @@ bin/*.bin
 `manifest.json` records the framework version, target, project path, Git commit, UTC timestamp, original segment offsets, and the generated esptool command.
 
 Activate the Python environment supplied with, or explicitly supported by, the
-selected ESP32-S31 preview toolchain. Confirm that its esptool recognizes
+selected ESP32-S31 toolchain. Confirm that its esptool recognizes
 `esp32s31`, then extract the archive and run the helper for the board serial
 port:
 

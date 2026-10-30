@@ -15,7 +15,7 @@ factory-recovery artifact.
 
 Writing a full-flash image can replace the application, partition table,
 settings, and user data. Back up required data first. Use the board-specific
-procedure and a preview flashing toolchain that explicitly supports
+procedure and a flashing toolchain that explicitly supports
 `esp32s31`.
 
 For the distinction between this image and source-built example packages, see

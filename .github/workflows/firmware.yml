@@ -1,4 +1,4 @@
-name: ESP32-S31 firmware and releases (experimental)
+name: ESP32-S31 firmware and releases
 
 "on":
   push:
@@ -63,7 +63,7 @@ jobs:
         run: python3 -B releases/release_contract.py --selector "$SELECTOR" --github-output "$GITHUB_OUTPUT"
 
   build:
-    name: ${{ matrix.name }} / ESP32-S31 preview
+    name: ${{ matrix.name }} / ESP32-S31
     needs: gate
     runs-on: ubuntu-24.04
     timeout-minutes: 60

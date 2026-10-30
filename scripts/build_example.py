@@ -57,7 +57,6 @@ def build(selector: str, jobs: int = 4) -> Path:
     context = {
         "framework_commit": revision,
         "component_manager_version": cfg["component_manager_version"],
-        "experimental": cfg["experimental"],
         "board": cfg["board"],
         "board_files": {p.relative_to(board).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                         for p in sorted(board.rglob("*")) if p.is_file()},

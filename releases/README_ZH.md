@@ -32,7 +32,7 @@ git push origin v1.0.0
 `origin` 必须指向 GitHub，或通过 GitLab 镜像把标签同步到 GitHub。
 如果标签只存在于 GitLab，GitHub 工作流不会启动。
 
-在 **Actions → ESP32-S31 firmware and releases (experimental)** 查看进度。
+在 **Actions → ESP32-S31 firmware and releases** 查看进度。
 构建和校验全部通过后，进入 **Releases** 下载对应示例的固件 ZIP。
 GitHub 自带的 **Source code** 压缩包是源码，不是可烧录固件。
 
@@ -40,8 +40,8 @@ GitHub 自带的 **Source code** 压缩包是源码，不是可烧录固件。
 标签需由 `git tag -a` 创建，并指向默认分支可达的提交。
 不要提前手动创建公开 Release，也不要移动已公开版本的标签。
 
-ESP32-S31 当前使用固定的 ESP-IDF 预览工具链，因此生成的 Release 标记为
-**Pre-release（预发布）**。产品版本、ESP-IDF 提交及组件版本会分别记录，
+Release 按正式版本发布并标记为 **Latest**。ESP32-S31 当前使用固定的
+ESP-IDF 工具链。产品版本、ESP-IDF 提交及组件版本会分别记录，
 便于回溯。编译通过不代表已经完成实板测试。
 
 ## 失败与重跑

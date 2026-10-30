@@ -26,7 +26,7 @@
 
 ## 软件支持
 
-仓库目前包含 **16 个 ESP-IDF 工程**，不包含 Arduino 示例。ESP32-S31 的框架支持仍在演进，请使用能够实际识别 `esp32s31` 目标的 ESP-IDF 版本；当前示例的组件清单要求 ESP-IDF `>=6.2`。
+仓库目前包含 **16 个 ESP-IDF 工程**，不包含 Arduino 示例。请使用支持 `esp32s31` 目标的 ESP-IDF 版本；当前示例的组件清单要求 ESP-IDF `>=6.2`。
 
 选择框架版本前，请先查看乐鑫官方的 [ESP32-S31 支持状态](https://developer.espressif.com/hardware/esp32s31/)。ESP-IDF 5.5、6.0 稳定版以及当前稳定版 Arduino-ESP32 均未提供 ESP32-S31 构建目标，因此本仓库不宣称支持这些版本。
 
@@ -71,11 +71,11 @@ USB 摄像头示例不代表板上集成摄像头；本板没有 DVP 摄像头�
 
 ## 测试固件
 
-[`firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin`](firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin) 是仓库随附的 16 MB **全 Flash 测试镜像**。它与源码编译产物分开存放，不能据此认定为出厂或恢复固件。全 Flash 镜像会覆盖目标 Flash 内容，烧录前请先阅读 [`firmware/README.md`](firmware/README.md)。
+[`firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin`](firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin) 是仓库随附的 16 MB **全 Flash 测试镜像**。全 Flash 镜像会覆盖目标 Flash 内容，烧录前请先阅读 [`firmware/README.md`](firmware/README.md)。
 
 ## 固件版本与 Releases
 
-向 GitHub 推送 `v主版本.次版本.补丁版本` 格式的附注标签后，自动编译全部 16 个示例，校验固件包，再发布包含 16 个 ZIP 和 `SHA256SUMS` 的 Release。ESP32-S31 使用 [`releases/config.json`](releases/config.json) 中固定的预览工具链，因此当前 Release 会标记为预发布。
+向 GitHub 推送 `v主版本.次版本.补丁版本` 格式的附注标签后，自动编译全部 16 个示例，校验固件包，再发布包含 16 个 ZIP 和 `SHA256SUMS` 的 Release。Release 按正式版本发布并标记为 **Latest**。ESP32-S31 使用 [`releases/config.json`](releases/config.json) 中固定的工具链。
 
 分支和 PR 构建上传 Actions 附件；手动运行可选择单个示例，不会发布 Release。操作步骤见[发布说明](releases/README_ZH.md)。
 

@@ -48,7 +48,7 @@ def fixture(directory, row):
         flasher[key] = {"file": paths[offset], "offset": offset}
     (build / "flasher_args.json").write_text(json.dumps(flasher))
     (build / "project_description.json").write_text(json.dumps({"target": "esp32s31", "project_name": row["name"]}))
-    context = {key: cfg[key] for key in ("framework_commit", "component_manager_version", "experimental", "board")}
+    context = {key: cfg[key] for key in ("framework_commit", "component_manager_version", "board")}
     context.update(board_files={"board_info.yaml": "b" * 64}, resolved_dependencies={
         "waveshare/waveshare_boards": {"version": "0.2.0", "component_hash": "c" * 64},
         **{name: {"version": version, "component_hash": "d" * 64}
@@ -272,7 +272,11 @@ class PublicationTests(FirmwareFixture):
         api = FakeGitHub()
         result = self.run_publish(api)
         self.assertFalse(result["draft"])
-        self.assertTrue(result["prerelease"])
+        self.assertFalse(result["prerelease"])
+        self.assertEqual(result["make_latest"], "true")
+        metadata_writes = [payload for _, _, payload in api.writes if payload and "prerelease" in payload]
+        self.assertTrue(metadata_writes)
+        self.assertTrue(all(payload["prerelease"] is False for payload in metadata_writes))
         self.assertEqual(set(api.uploads), {self.archive.name, "SHA256SUMS"})
 
     def test_digest_failure_leaves_draft(self):
@@ -286,10 +290,12 @@ class PublicationTests(FirmwareFixture):
         self.assertFalse(api.writes)
 
     def test_draft_can_be_retried(self):
-        api = FakeGitHub({"id": 1, "draft": True, "tag_name": VERSION,
+        api = FakeGitHub({"id": 1, "draft": True, "prerelease": True, "tag_name": VERSION,
                           "html_url": "https://github.com/example/repo/releases/tag/" + VERSION})
         api.uploads["stale.zip"] = b"stale"
-        self.run_publish(api)
+        result = self.run_publish(api)
+        self.assertFalse(result["prerelease"])
+        self.assertEqual(result["make_latest"], "true")
         self.assertNotIn("stale.zip", api.uploads)
         self.assertTrue(any(method == "DELETE" for _, method, _ in api.writes))
 

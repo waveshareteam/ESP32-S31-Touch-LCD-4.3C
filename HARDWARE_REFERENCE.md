@@ -2,7 +2,7 @@
 
 [简体中文](HARDWARE_REFERENCE_ZH.md)
 
-This reference consolidates the board settings that can be checked against the ESP32-S31 schematic and the managed Board Manager definition. Values copied from similarly named ESP32-S3 products are not valid evidence for this board.
+This reference consolidates the board settings that can be checked against the ESP32-S31 schematic and the managed Board Manager definition.
 
 ## Board overview
 
@@ -38,8 +38,6 @@ The current board definition drives the panel over a 16-bit RGB bus with two fra
 | GT911 reset | GPIO46 |
 | GT911 interrupt | GPIO2 |
 | Touch resolution | 800 x 480 |
-
-The schematic contains an `LCD_RST` net, while the current generic RGB YAML does not identify a display-reset GPIO. Do not infer an LCD reset pin from another product.
 
 ## Shared I2C bus
 
@@ -80,7 +78,7 @@ The current software sets I2S MCLK to `-1` and configures ES8389 for no external
 | D3 | GPIO23 |
 | Card power enable | GPIO56, active low |
 
-The board definition configures a 4-bit SDMMC bus using D0-D3. The TF card, SD WAV player and comprehensive test examples use this shared configuration. Runtime card initialization and read/write behavior have not been verified on hardware in 4-bit mode.
+The board definition configures a 4-bit SDMMC bus using D0-D3. The TF card, SD WAV player and comprehensive test examples use this shared configuration.
 
 ## Industrial and USB interfaces
 
@@ -89,16 +87,3 @@ The board definition configures a 4-bit SDMMC bus using D0-D3. The TF card, SD W
 | CAN-FD | TX GPIO4, RX GPIO5 | MCP2562FD transceiver; 500 kbit/s arbitration, 2 Mbit/s data |
 | RS485 | UART1 TX GPIO6, RX GPIO7, RTS/DE GPIO61 | SIT3088EESA / SP3485EN circuit; 115200 baud, half-duplex |
 | USB Host | Dedicated USB D+ / D- package pins | VBUS is supplied directly from the board 5 V rail |
-
-The USB VBUS rail has no Board Manager GPIO-enable device. Do not document it as software-controlled. The board has no DVP camera; the USB camera example requires an external UVC camera.
-
-## Source files
-
-The primary repository sources for this reference are:
-
-- [ESP32-S31 schematic](hardware/schematics/ESP32-S31-Touch-LCD-4.3C-Schematics.pdf)
-- Comprehensive-test board information: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_info.yaml`
-- Comprehensive-test device definition: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_devices.yaml`
-- Comprehensive-test peripheral definition: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_peripherals.yaml`
-
-The files under [`hardware/dimensions/`](hardware/dimensions/) identify the product as `ESP32-S3-Touch-LCD-4.3C` in their names and metadata. They are retained as supplied S3 reference material; the approximately 75.10 x 112.40 mm drawing is not an S31 mechanical specification.

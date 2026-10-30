@@ -26,7 +26,7 @@ See [Hardware Reference](HARDWARE_REFERENCE.md) for the verified pin map, I2C ad
 
 ## Software support
 
-The repository currently contains **16 ESP-IDF projects** and no Arduino examples. ESP32-S31 framework support is still evolving: use an ESP-IDF revision that actually lists `esp32s31` as a supported target. The component manifests in these examples currently require ESP-IDF `>=6.2`.
+The repository currently contains **16 ESP-IDF projects** and no Arduino examples. Use an ESP-IDF revision that supports the `esp32s31` target. The component manifests in these examples currently require ESP-IDF `>=6.2`.
 
 Before choosing a framework revision, check Espressif's [ESP32-S31 support status](https://developer.espressif.com/hardware/esp32s31/). Stable ESP-IDF 5.5 and 6.0 releases, and the current stable Arduino-ESP32 release, do not provide an ESP32-S31 build target, so this repository does not claim support for them.
 
@@ -71,18 +71,19 @@ The USB camera example does not imply an on-board camera; this board has no DVP 
 
 ## Test firmware
 
-[`firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin`](firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin) is a 16 MB full-flash **test image** supplied with this repository. It is kept separate from source-built example artifacts and is not described as factory or recovery firmware. Read [`firmware/README.md`](firmware/README.md) before flashing it because writing a full-flash image replaces the contents of the target flash.
+[`firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin`](firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin) is a 16 MB full-flash **test image** supplied with this repository. Writing a full-flash image replaces the contents of the target flash. Read [`firmware/README.md`](firmware/README.md) before flashing it.
 
 ## Versioned firmware releases
 
 Pushing an annotated `vMAJOR.MINOR.PATCH` tag to GitHub builds all 16 examples,
 checks their firmware packages, and publishes a Release with 16 ZIP files and
-`SHA256SUMS`. ESP32-S31 builds use the pinned preview toolchain in
-[`releases/config.json`](releases/config.json), so these Releases are marked
-as prereleases. Branch and pull-request builds upload Actions artifacts;
-manual runs can select one example and do not publish a Release.
+`SHA256SUMS`. Releases are published as regular releases and marked **Latest**.
+ESP32-S31 builds use the pinned toolchain in
+[`releases/config.json`](releases/config.json).
 
-See [Release instructions](releases/README.md#automatic-github-releases).
+Branch and pull-request builds upload Actions artifacts; manual runs can select
+one example and do not publish a Release. See the
+[Release instructions](releases/README.md#automatic-github-releases).
 
 ## Repository layout
 

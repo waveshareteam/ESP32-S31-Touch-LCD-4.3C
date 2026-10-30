@@ -7,7 +7,7 @@ Report security issues through a private channel listed on the Waveshare [suppor
 
 - the ESP32-S31-Touch-LCD-4.3C product and hardware revision,
 - the affected repository path, example, or firmware artifact,
-- the exact ESP-IDF preview package, tag, or commit,
+- the exact ESP-IDF package, tag, or commit,
 - an impact summary and reproducible steps,
 - relevant logs or proof of concept,
 - any suggested mitigation.

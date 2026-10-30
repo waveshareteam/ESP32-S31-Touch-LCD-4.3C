@@ -19,8 +19,7 @@ SHA_RE = re.compile(r"[0-9a-f]{40}")
 def config() -> dict:
     value = json.loads((ROOT / "releases/config.json").read_text())
     if (value["target"] != "esp32s31"
-            or not SHA_RE.fullmatch(value["framework_commit"])
-            or type(value["experimental"]) is not bool):
+            or not SHA_RE.fullmatch(value["framework_commit"])):
         raise ValueError("Invalid release configuration")
     return value
 

@@ -376,7 +376,7 @@ def package(args: argparse.Namespace) -> Path:
             description = json.loads((build_dir / "project_description.json").read_text())
             if description["target"] != target or description["project_name"] != project.name:
                 raise ValueError("Build description target/project mismatch")
-            for key in ("framework_commit", "component_manager_version", "experimental", "board"):
+            for key in ("framework_commit", "component_manager_version", "board"):
                 if context[key] != cfg[key]:
                     raise ValueError(f"Build context mismatch: {key}")
             if args.framework_version != cfg["framework_version"]:
@@ -398,8 +398,7 @@ def package(args: argparse.Namespace) -> Path:
             write_text(readme_path, readme_path.read_text() +
                        f"\nSource: `{args.git_sha}`\n\nFramework: `{args.framework_version}` "
                        f"(`{manifest['framework_commit']}`).\n\n"
-                       f"Product version: `{manifest['release_version'] or 'development build'}`. "
-                       f"Experimental toolchain: `{manifest['experimental']}`.\n\n"
+                       f"Product version: `{manifest['release_version'] or 'development build'}`.\n\n"
                        "Verify SHA256SUMS before flashing. See manifest.json for exact "
                        "registry dependency versions and board-definition hashes.\n")
         sums = "".join(f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(package_dir).as_posix()}\n"
