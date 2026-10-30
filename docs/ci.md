@@ -1,43 +1,52 @@
 # Continuous Integration
 
-The repository currently runs target-independent repository checks. It does not run an ESP-IDF build matrix.
+## Repository checks
 
-ESP32-S31 support is still described by Espressif as preview support. The current status and recommended development branch are maintained on the [official ESP32-S31 status page](https://developer.espressif.com/hardware/esp32s31/). Stable ESP-IDF build jobs must not be added until the selected release explicitly supports `esp32s31`. A prerelease or development-branch job requires an explicit maintainer decision and must be pinned and labeled experimental.
+`.github/workflows/repository-checks.yml` checks Python syntax, example discovery,
+release-tool tests and packaging with synthetic firmware data. These checks do
+not require ESP-IDF or connected hardware.
 
-## Repository Checks
+## Firmware builds and Releases
 
-`.github/workflows/repository-checks.yml` performs lightweight checks that do not install ESP-IDF or compile firmware:
+`.github/workflows/firmware.yml` builds the 16 first-party ESP-IDF projects:
 
-- compiles the Python tooling to catch syntax errors;
-- requires exactly 16 first-party projects under `examples/esp-idf/*/CMakeLists.txt`;
-- validates both example-name and repository-relative path selectors;
-- checks explicit project target declarations against `esp32s31`;
-- checks archive-name sanitization; and
-- creates and inspects a firmware archive from synthetic ESP-IDF build metadata.
+- Firmware, tooling or workflow changes on `main`, `master` and pull requests
+  build all projects and upload firmware ZIPs as Actions artifacts.
+- A manual run accepts `all`, an example name or a repository-relative example
+  path. It builds and uploads the selection without publishing a Release.
+- Pushing an annotated `vMAJOR.MINOR.PATCH` tag builds all 16 projects, verifies
+  the complete artifact set, uploads a draft Release, checks the remote asset
+  names, sizes and SHA256 digests, then publishes it.
 
-The packaging smoke test does not validate application code, managed components, hardware behavior, or framework compatibility.
+The release commit must be on the default branch. Every build and validation
+job must succeed. A rerun may replace an unpublished draft's assets, but refuses
+to modify an already published version. A fresh public asset download is also
+checked after publication. Releases contain 16 firmware ZIPs and `SHA256SUMS`;
+the checked-in full-flash test image is not republished as generated firmware.
 
-## Discovering Projects
+## Pinned experimental toolchain
 
-The discovery command always requires an explicit target:
+[`releases/config.json`](../releases/config.json) records the exact ESP-IDF
+commit, Component Manager version, board identifier and component constraints.
+The build script checks the active toolchain against this configuration.
+The managed `waveshare/waveshare_boards` package must already contain the board.
+There is no per-project board copy or CI fallback definition.
 
-```bash
-python3 scripts/discover_examples.py --target esp32s31 --selector all
-```
+The [official ESP32-S31 status page](https://developer.espressif.com/hardware/esp32s31/)
+still directs developers to preview support. ESP-IDF v6.1 lists `esp32s31` among
+`PREVIEW_TARGETS`, while these examples require `>=6.2`. This workflow uses the
+previously verified development commit recorded in the configuration, enables
+`--preview` explicitly, labels builds experimental and marks Releases as
+prereleases. It does not claim a stable framework or hardware-validation matrix.
 
-`--selector` accepts `all`, an example directory name, or a repository-relative example path. For example:
+Each firmware manifest records its source commit, exact framework commit,
+resolved registry dependency versions/hashes and board-definition file hashes.
+The aggregate validator rejects dependency or board drift between matrix jobs.
 
-```bash
-python3 scripts/discover_examples.py \
-  --target esp32s31 \
-  --selector examples/esp-idf/11_rgb_lcd \
-  --require-match
-```
+Third-party Actions are pinned to full commit SHAs and maintained by Dependabot.
+Workflow permissions default to `contents: read`; only the release job gets
+`contents: write` through the built-in GitHub token. No personal token is needed.
 
-The script discovers ESP-IDF projects only. This repository has no first-party Arduino sketches, and the stable Arduino-ESP32 package does not provide an ESP32-S31 board FQBN, so Arduino discovery and CI are intentionally absent.
-
-## Adding Build CI Later
-
-Before adding build jobs, re-run the framework support gate against current official releases. Include only stable ESP-IDF releases that contain the `esp32s31` target. Keep any explicitly approved preview job separate from required checks, pin it to an exact tag or commit, and pass `--target esp32s31` to discovery and packaging commands.
-
-Source-built firmware may be packaged with `releases/package_firmware.py` after a successful build. Prebuilt test binaries under `firmware/` are not CI build outputs and must not be republished as generated artifacts.
+See [Release instructions](../releases/README.md#automatic-github-releases)
+([简体中文](../releases/README_ZH.md)) for tagging and GitLab mirror requirements.
+Build success does not establish physical-board functionality.

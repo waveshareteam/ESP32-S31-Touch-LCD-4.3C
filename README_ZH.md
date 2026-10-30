@@ -4,9 +4,9 @@
 
 **ESP32-S31-Touch-LCD-4.3C** 是一款基于 ESP32-S31 的 4.3 英寸人机交互开发板，集成 800 x 480 电容触摸屏、音频、运动传感器、电池监测、TF 卡、RTC、RS485、CAN-FD 和 USB Host 等功能。
 
-本仓库提供 ESP-IDF 示例、示例使用的板级定义、硬件图纸以及一份全 Flash 测试固件。
+本仓库提供 ESP-IDF 示例、硬件图纸以及一份全 Flash 测试固件。示例通过托管组件加载板级定义。
 
-![ESP32-S31-Touch-LCD-4.3C](assets/Product-1.webp)
+![ESP32-S31-Touch-LCD-4.3C](docs/images/Product-1.webp)
 
 ## 硬件概览
 
@@ -34,29 +34,31 @@
 
 安装并导出兼容的 ESP-IDF 环境，然后在任一示例目录执行：
 
+首次构建前，请按[组件准备说明](docs/components.md#prepare-the-board-definition)解析托管依赖并生成板级配置。发布的组件包需已包含 `esp32_s31_touch_lcd_4_3c`。
+
 ```text
-cd examples/esp-idf/1_i2c_scan
+cd examples/esp-idf/01_i2c_scan
 idf.py set-target esp32s31
 idf.py bmgr -b esp32_s31_touch_lcd_4_3c
 idf.py build
 idf.py -p PORT flash monitor
 ```
 
-请将 `PORT` 替换为开发板串口。`idf.py bmgr` 会读取本地 `esp32_s31_touch_lcd_4_3c` 板级定义并生成 Board Manager 初始化组件。每个示例的具体行为和硬件要求见对应 README。
+请将 `PORT` 替换为开发板串口。`idf.py bmgr` 会读取托管组件中的 `esp32_s31_touch_lcd_4_3c` 板级定义并生成 Board Manager 初始化组件。每个示例的具体行为和硬件要求见对应 README。
 
 ## 示例
 
 | 序号 | 示例 | 功能 |
 | ---: | --- | --- |
-| 1 | [`1_i2c_scan`](examples/esp-idf/1_i2c_scan/) | 扫描板载 I2C 总线 |
-| 2 | [`2_rtc_pcf85063atl`](examples/esp-idf/2_rtc_pcf85063atl/) | 读写 RTC |
-| 3 | [`3_imu_qmi8658`](examples/esp-idf/3_imu_qmi8658/) | 读取加速度计和陀螺仪数据 |
-| 4 | [`4_bat_bq27220`](examples/esp-idf/4_bat_bq27220/) | 读取电量计信息 |
-| 5 | [`5_tf_card`](examples/esp-idf/5_tf_card/) | 挂载并访问 TF 卡 |
-| 6 | [`6_codec_mic_raw`](examples/esp-idf/6_codec_mic_raw/) | 通过 ES8389 采集麦克风原始数据 |
-| 7 | [`7_codec_sd_wav_player`](examples/esp-idf/7_codec_sd_wav_player/) | 播放 TF 卡中的 WAV 文件 |
-| 8 | [`8_rs485`](examples/esp-idf/8_rs485/) | 测试半双工 RS485 接口 |
-| 9 | [`9_canfd`](examples/esp-idf/9_canfd/) | 收发 CAN-FD 帧 |
+| 1 | [`01_i2c_scan`](examples/esp-idf/01_i2c_scan/) | 扫描板载 I2C 总线 |
+| 2 | [`02_rtc_pcf85063atl`](examples/esp-idf/02_rtc_pcf85063atl/) | 读写 RTC |
+| 3 | [`03_imu_qmi8658`](examples/esp-idf/03_imu_qmi8658/) | 读取加速度计和陀螺仪数据 |
+| 4 | [`04_bat_bq27220`](examples/esp-idf/04_bat_bq27220/) | 读取电量计信息 |
+| 5 | [`05_tf_card`](examples/esp-idf/05_tf_card/) | 挂载并访问 TF 卡 |
+| 6 | [`06_codec_mic_raw`](examples/esp-idf/06_codec_mic_raw/) | 通过 ES8389 采集麦克风原始数据 |
+| 7 | [`07_codec_sd_wav_player`](examples/esp-idf/07_codec_sd_wav_player/) | 播放 TF 卡中的 WAV 文件 |
+| 8 | [`08_rs485`](examples/esp-idf/08_rs485/) | 测试半双工 RS485 接口 |
+| 9 | [`09_canfd`](examples/esp-idf/09_canfd/) | 收发 CAN-FD 帧 |
 | 10 | [`10_usb_host`](examples/esp-idf/10_usb_host/) | 枚举外部 USB 设备 |
 | 11 | [`11_rgb_lcd`](examples/esp-idf/11_rgb_lcd/) | 驱动 800 x 480 RGB LCD |
 | 12 | [`12_touch`](examples/esp-idf/12_touch/) | 读取 GT911 触摸输入 |
@@ -71,12 +73,17 @@ USB 摄像头示例不代表板上集成摄像头；本板没有 DVP 摄像头�
 
 [`firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin`](firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin) 是仓库随附的 16 MB **全 Flash 测试镜像**。它与源码编译产物分开存放，不能据此认定为出厂或恢复固件。全 Flash 镜像会覆盖目标 Flash 内容，烧录前请先阅读 [`firmware/README.md`](firmware/README.md)。
 
+## 固件版本与 Releases
+
+向 GitHub 推送 `v主版本.次版本.补丁版本` 格式的附注标签后，自动编译全部 16 个示例，校验固件包，再发布包含 16 个 ZIP 和 `SHA256SUMS` 的 Release。ESP32-S31 使用 [`releases/config.json`](releases/config.json) 中固定的预览工具链，因此当前 Release 会标记为预发布。
+
+分支和 PR 构建上传 Actions 附件；手动运行可选择单个示例，不会发布 Release。操作步骤见[发布说明](releases/README_ZH.md)。
+
 ## 仓库结构
 
 ```text
-assets/              产品图片
-config/              共享配置说明
 docs/                仓库、组件、CI 和固件说明
+docs/images/         产品图片
 examples/esp-idf/    独立 ESP-IDF 工程
 firmware/            随仓库提供的全 Flash 测试镜像
 hardware/            原理图和机械文件
@@ -90,6 +97,7 @@ scripts/             示例发现与仓库检查脚本
 - [组件布局](docs/components.md)
 - [固件说明](docs/firmware.md)
 - [CI 范围](docs/ci.md)
+- [编译验证记录](docs/validation.md)
 - [参与贡献](CONTRIBUTING.md)
 - [技术支持](SUPPORT.md)
 - [安全策略](SECURITY.md)

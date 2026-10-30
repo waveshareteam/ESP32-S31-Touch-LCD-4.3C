@@ -1,0 +1,13 @@
+{
+  "target": "esp32s31",
+  "board": "esp32_s31_touch_lcd_4_3c",
+  "expected_projects": 16,
+  "framework_version": "6.2.0-dev-08e0d30a74ad",
+  "framework_commit": "08e0d30a74ad0bfd5a34933142b80f45619ee410",
+  "component_manager_version": "3.1.2",
+  "experimental": true,
+  "component_constraints": {
+    "espressif/esp_board_manager": "0.7.5",
+    "espressif/esp_codec_dev": "2.0.0-beta5"
+  }
+}

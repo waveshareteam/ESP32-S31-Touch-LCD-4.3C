@@ -37,8 +37,11 @@ documentation.
 - First-party source projects live under `examples/esp-idf/`.
 - The repository currently contains 16 ESP-IDF projects and no Arduino
   sketches or bundled Arduino libraries.
-- Each project keeps its board definition and required local components inside
-  that project. Do not make one example depend on a sibling example's files.
+- Each project declares `waveshare/waveshare_boards` and keeps its required
+  application-specific components inside that project. Follow
+  [Component Strategy](docs/components.md#prepare-the-board-definition) when
+  preparing managed board definitions. Do not make one example depend on a
+  sibling example's files.
 - `components/gen_bmgr_codes` is generated for the selected example. Do not
   copy generated output between examples.
 - The binary under `firmware/` is a test full-flash image. It is not a source

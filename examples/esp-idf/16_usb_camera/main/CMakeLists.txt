@@ -2,7 +2,7 @@ idf_component_register(
     SRCS "main.c"
     INCLUDE_DIRS "."
     PRIV_REQUIRES
-        esp_board_manager
+        waveshare_boards
         gen_bmgr_codes
         s31_board_support
         esp_lcd

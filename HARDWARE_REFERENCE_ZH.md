@@ -2,7 +2,7 @@
 
 [English](HARDWARE_REFERENCE.md)
 
-本文汇总了可由 ESP32-S31 原理图和仓库内 Board Manager 板级定义共同核对的信息。名称相近的 ESP32-S3 产品资料不能作为本板硬件参数的依据。
+本文汇总了可由 ESP32-S31 原理图和托管组件中的 Board Manager 板级定义共同核对的信息。名称相近的 ESP32-S3 产品资料不能作为本板硬件参数的依据。
 
 ## 板卡概览
 
@@ -80,7 +80,7 @@ Board Manager 设备 YAML 将 GT911 写成 `0xBA` / `0x28`、ES8389 写成 `0x20
 | D3 | GPIO23 |
 | 卡电源使能 | GPIO56，低有效 |
 
-虽然板级定义包含 D1-D3，但当前示例固定使用 1 位 SDMMC。未经软硬件联合测试前，不应宣称 4 位模式已经验证。
+虽然板级定义包含 D1-D3，但当前示例固定使用 1 位 SDMMC，编译及测试结果仅适用于配置的 1 位模式。
 
 ## 工业接口与 USB
 
@@ -97,8 +97,8 @@ USB VBUS 没有对应的 Board Manager GPIO 使能设备，不能描述为软件
 本文主要依据以下仓库文件：
 
 - [ESP32-S31 原理图](hardware/schematics/ESP32-S31-Touch-LCD-4.3C-Schematics.pdf)
-- [综合测试板卡信息](examples/esp-idf/13_comprehensive_test/components/esp_boards/esp32_s31_touch_lcd_4_3c/board_info.yaml)
-- [综合测试设备定义](examples/esp-idf/13_comprehensive_test/components/esp_boards/esp32_s31_touch_lcd_4_3c/board_devices.yaml)
-- [综合测试外设定义](examples/esp-idf/13_comprehensive_test/components/esp_boards/esp32_s31_touch_lcd_4_3c/board_peripherals.yaml)
+- 综合测试板卡信息: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_info.yaml`
+- 综合测试设备定义: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_devices.yaml`
+- 综合测试外设定义: `managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c/board_peripherals.yaml`
 
-[`hardware/dimensions/`](hardware/dimensions/) 中的文件名和元数据仍使用 `ESP32-S3-Touch-LCD-4.3C`。仓库按原样保留这些文件，但其中约 75.10 x 112.40 mm 的图纸在微雪确认版本关系前不能作为 S31 的权威机械尺寸依据。
+[`hardware/dimensions/`](hardware/dimensions/) 中的文件名和元数据标注为 `ESP32-S3-Touch-LCD-4.3C`。这些文件按原样保留，属于 S3 参考资料，其中约 75.10 x 112.40 mm 的图纸不是 S31 的机械尺寸规格。
