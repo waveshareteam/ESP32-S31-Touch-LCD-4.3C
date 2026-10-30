@@ -12,8 +12,8 @@ Board Manager owns the complete hardware lifecycle:
 - I2S uses BCLK GPIO37, LRCK GPIO38 and DOUT GPIO39.
 - I2C configures the ES8389 at address `0x20`; its internal DAC reference is
   enabled to match the product BSP and avoid the invalid/noisy output path.
-- SDMMC runs in 1-bit mode to avoid the observed 4-bit SD Status Register timeout;
-  its bandwidth remains sufficient for 48 kHz, 16-bit stereo WAV playback.
+- SDMMC runs in 4-bit mode, using D0-D3 on GPIO20-GPIO23, CLK on GPIO24
+  and CMD on GPIO25.
 
 The included `test.wav` is an original six-second diagnostic signal: first a
 left-channel tone, then a right-channel tone, followed by opposing stereo

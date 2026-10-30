@@ -80,7 +80,7 @@ The current software sets I2S MCLK to `-1` and configures ES8389 for no external
 | D3 | GPIO23 |
 | Card power enable | GPIO56, active low |
 
-The current examples configure a 1-bit SDMMC bus even though D1-D3 are assigned in the board definition. Their build and test results apply to the configured 1-bit mode only.
+The board definition configures a 4-bit SDMMC bus using D0-D3. The TF card, SD WAV player and comprehensive test examples use this shared configuration. Runtime card initialization and read/write behavior have not been verified on hardware in 4-bit mode.
 
 ## Industrial and USB interfaces
 

@@ -45,7 +45,8 @@ Codec remains on the 2.x prerelease API required by Board Manager.
 These results cover compilation and repository consistency; no firmware was
 flashed during validation.
 Display output, touch alignment, audio behavior, and external devices require
-measurements on hardware. The SDMMC examples configure 1-bit mode. Mechanical
+measurements on hardware. The original 16-example build used 1-bit SDMMC; the
+board definition now selects 4-bit mode. Mechanical
 files named ESP32-S3 remain S3 reference material rather than S31 dimensions.
 
 The integrated test compiled successfully with the ES8389 microphone clock
@@ -85,3 +86,16 @@ corrupted or incomplete artifacts, dependency drift, draft retry, remote digest
 failure and refusal to change a public Release. Both workflows passed actionlint.
 The existing generic packaging smoke test also passed. GitHub upload/publication
 was exercised with a mocked API, not an actual remote Release.
+
+## SDMMC 4-bit follow-up
+
+The shared board definition now sets `fs_sdcard.config.sub_config.bus_width`
+to 4, with D0-D3 on GPIO20-GPIO23, CLK on GPIO24 and CMD on GPIO25.
+Examples `05_tf_card`, `07_codec_sd_wav_player` and `13_comprehensive_test`
+were rebuilt successfully with this updated board fixture and the same pinned
+toolchain. Each generated `gen_board_device_config.c` was checked for
+`.bus_width = 4`. The builds were isolated from the product checkout.
+The updated board definition must be included in the published
+`waveshare/waveshare_boards` package used by these examples.
+No 4-bit card initialization, read/write or audio playback test was performed
+on a physical board.
