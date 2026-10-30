@@ -1,8 +1,8 @@
 dependencies:
   idf:
     version: ">=6.2"
-  espressif/esp_board_manager:
-    version: ">=0.6.1"
+  waveshare/waveshare_boards:
+    version: "*"
   lvgl/lvgl:
     version: "9.5.0"
   espressif/esp_lvgl_adapter:

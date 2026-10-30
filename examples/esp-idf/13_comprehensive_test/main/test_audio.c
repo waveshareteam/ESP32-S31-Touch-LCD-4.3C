@@ -134,6 +134,69 @@ static esp_err_t codec_ret_to_err(int ret)
     return ret == ESP_CODEC_DEV_OK ? ESP_OK : ESP_FAIL;
 }
 
+static esp_err_t mic_configure_bclk(dev_audio_codec_handles_t *adc)
+{
+    /* esp_codec_dev 2.0.0-beta5 computes ES8389 BCLK as sample_rate * bits * 4,
+     * even with DAC reference disabled. This stream has only two 16-bit slots.
+     * Restore the driver's 48 kHz / 32fs coefficient row after codec open.
+     * Keep this workaround here so managed component downloads remain intact.
+     */
+    const audio_hw_base_t *hw = &adc->codec_if->hw_base;
+    esp_codec_dev_bus_info_t bus = {0};
+    if (!adc->data_if->get_bus_info || !hw->get_reg || !hw->set_reg) {
+        return ESP_ERR_NOT_SUPPORTED;
+    }
+    int ret = adc->data_if->get_bus_info(adc->data_if, ESP_CODEC_DEV_TYPE_IN, &bus);
+    if (ret != ESP_CODEC_DEV_OK) {
+        return codec_ret_to_err(ret);
+    }
+    if (bus.mode != ESP_CODEC_DEV_I2S_MODE_STD_PHILIPS || bus.sample_rate != 48000 ||
+        bus.total_slot != 2 || bus.slot_bit != 16 || bus.total_frame_bits != 32) {
+        ESP_LOGE(S31_TEST_TAG, "MIC clock workaround requires 48 kHz, two 16-bit I2S slots");
+        return ESP_ERR_NOT_SUPPORTED;
+    }
+    int clock_source = 0;
+    int reference = 0;
+    ret = hw->get_reg(hw, 0x02, &clock_source);
+    if (ret == ESP_CODEC_DEV_OK) {
+        ret = hw->get_reg(hw, 0x23, &reference);
+    }
+    if (ret != ESP_CODEC_DEV_OK) {
+        return codec_ret_to_err(ret);
+    }
+    if ((clock_source & 0xC0) != 0x40 || (reference & 0x80) != 0) {
+        ESP_LOGE(S31_TEST_TAG, "MIC requires BCLK source and DAC reference disabled");
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    /* Only these four registers differ between the driver's 48 kHz 64fs and
+     * 32fs coefficient rows. Preserve gain, routing, mute and analog bias.
+     */
+    static const struct {
+        uint8_t reg;
+        uint8_t value;
+    } clock_regs[] = {
+        {0x05, 0x45},
+        {0x06, 0xA4},
+        {0x07, 0xD0},
+        {0x09, 0xD1},
+    };
+    for (size_t i = 0; i < sizeof(clock_regs) / sizeof(clock_regs[0]); i++) {
+        ret = hw->set_reg(hw, clock_regs[i].reg, clock_regs[i].value);
+        int actual = 0;
+        if (ret == ESP_CODEC_DEV_OK) {
+            ret = hw->get_reg(hw, clock_regs[i].reg, &actual);
+        }
+        if (ret != ESP_CODEC_DEV_OK || actual != clock_regs[i].value) {
+            ESP_LOGE(S31_TEST_TAG, "MIC clock register 0x%02x verification failed",
+                     clock_regs[i].reg);
+            return ESP_FAIL;
+        }
+    }
+    ESP_LOGI(S31_TEST_TAG, "MIC clock: 48000 Hz, 16-bit stereo, BCLK=1536000 Hz (32fs)");
+    return ESP_OK;
+}
+
 void test_speaker_play_tone(void)
 {
 #if CONFIG_S31_TEST_ENABLE_SPEAKER_TONE
@@ -231,6 +294,9 @@ void audio_task(void *arg)
     ret = codec_ret_to_err(esp_codec_dev_open(adc->codec_dev, &fs));
     if (ret == ESP_OK) {
         codec_opened = true;
+        ret = mic_configure_bclk(adc);
+    }
+    if (ret == ESP_OK) {
         ret = codec_ret_to_err(esp_codec_dev_set_in_gain(adc->codec_dev, MIC_INPUT_GAIN_DB));
     }
     int16_t *samples = NULL;

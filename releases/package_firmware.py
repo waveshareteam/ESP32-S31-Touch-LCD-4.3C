@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import re
 import shutil
 import stat
@@ -14,6 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 DEFAULT_BAUD = "460800"
 TARGET_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
@@ -71,6 +74,8 @@ def resolve_flash_file(build_dir: Path, value: str) -> Path:
     source = Path(value)
     if not source.is_absolute():
         source = build_dir / source
+    if not source.resolve().is_relative_to(build_dir.resolve()):
+        raise ValueError("firmware segment must be inside the build directory")
     if not source.is_file():
         raise FileNotFoundError(f"missing firmware file: {source}")
     return source
@@ -141,6 +146,8 @@ def create_combined_bin(
                 raise ValueError(
                     f"firmware segment {entry['file']} at {entry['offset']} overlaps a previous segment"
                 )
+            if offset + source.stat().st_size > 32 * 1024 * 1024:
+                raise ValueError("firmware exceeds the supported flash size")
             write_padding(output, offset - position)
             with source.open("rb") as segment:
                 shutil.copyfileobj(segment, output)
@@ -155,6 +162,7 @@ def build_esptool_command(
     after: str,
     write_flash_args: list[str],
     combined_file: str,
+    stub: bool = True,
 ) -> list[str]:
     return [
         "python",
@@ -170,7 +178,8 @@ def build_esptool_command(
         before,
         "--after",
         after,
-        "write_flash",
+        *([] if stub else ["--no-stub"]),
+        "write-flash",
         *write_flash_args,
         "0x0",
         combined_file,
@@ -190,22 +199,43 @@ def write_flash_helpers(
 ) -> None:
     shell = f"""#!/usr/bin/env sh
 set -eu
-PORT="${{1:-}}"
-if [ -z "$PORT" ]; then
+if [ "$#" -ne 1 ]; then
     echo "Usage: $0 /dev/ttyUSB0"
     exit 2
 fi
+PORT="$1"
 cd "$(dirname "$0")"
-{shell_command(command)}
+if command -v python >/dev/null 2>&1 && python -c 'import esptool' >/dev/null 2>&1; then
+    PYTHON=python
+elif command -v python3 >/dev/null 2>&1 && python3 -c 'import esptool' >/dev/null 2>&1; then
+    PYTHON=python3
+else
+    echo "Install an ESP32-S31-capable esptool: python3 -m pip install esptool" >&2
+    exit 1
+fi
+exec "$PYTHON" {shell_command(command[1:])}
 """
     batch = f"""@echo off
+setlocal
 set "PORT=%~1"
 if not defined PORT (
   echo Usage: flash.bat COMx
   exit /b 2
 )
+if not "%~2"=="" exit /b 2
 cd /d "%~dp0"
-{batch_command(command)}
+python -c "import esptool" >nul 2>&1
+if not errorlevel 1 goto use_python
+py -3 -c "import esptool" >nul 2>&1
+if not errorlevel 1 goto use_py
+echo Install an ESP32-S31-capable esptool: py -3 -m pip install esptool
+exit /b 1
+:use_python
+python {batch_command(command[1:])}
+exit /b %errorlevel%
+:use_py
+py -3 {batch_command(command[1:])}
+exit /b %errorlevel%
 """
     args_text = " ".join("<PORT>" if part == "$PORT" else part for part in command) + "\n"
     readme = f"""# {artifact_name}
@@ -236,13 +266,18 @@ flash.bat COMx
     write_text(package_dir / "README.md", readme)
 
 
-def create_zip(package_dir: Path, zip_path: Path) -> None:
+def create_zip(package_dir: Path, zip_path: Path, timestamp: datetime) -> None:
     if zip_path.exists():
         zip_path.unlink()
     with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for path in sorted(package_dir.rglob("*"), key=lambda item: item.as_posix()):
             if path.is_file():
-                archive.write(path, path.relative_to(package_dir.parent).as_posix())
+                stamp = timestamp.replace(year=max(timestamp.year, 1980)).timetuple()[:6]
+                info = zipfile.ZipInfo(path.relative_to(package_dir.parent).as_posix(), stamp)
+                info.create_system = 3
+                info.external_attr = (0o100755 if path.name == "flash.sh" else 0o100644) << 16
+                info.compress_type = zipfile.ZIP_DEFLATED
+                archive.writestr(info, path.read_bytes())
 
 
 def package(args: argparse.Namespace) -> Path:
@@ -288,12 +323,13 @@ def package(args: argparse.Namespace) -> Path:
                 f"flasher_args.json declares chip {declared_chip}, but --target is {target}"
             )
 
-        before = str(extra_args.get("before", "default_reset"))
-        after = str(extra_args.get("after", "hard_reset"))
+        before = str(extra_args.get("before", "default_reset")).replace("_", "-")
+        after = str(extra_args.get("after", "hard_reset")).replace("_", "-")
         raw_write_args = flasher_args.get("write_flash_args", [])
         if not isinstance(raw_write_args, list):
             raise ValueError("write_flash_args must be a list")
-        write_flash_args = [str(item) for item in raw_write_args]
+        write_flash_args = [str(item).replace("_", "-") if str(item).startswith("--") else str(item)
+                            for item in raw_write_args]
 
         combined_file = create_combined_bin(
             package_dir, firmware_dir, artifact_name, segments
@@ -305,13 +341,11 @@ def package(args: argparse.Namespace) -> Path:
             after,
             write_flash_args,
             combined_file,
+            bool(extra_args.get("stub", True)),
         )
-        timestamp = (
-            datetime.now(timezone.utc)
-            .replace(microsecond=0)
-            .isoformat()
-            .replace("+00:00", "Z")
-        )
+        timestamp = (datetime.fromtimestamp(int(os.environ["SOURCE_DATE_EPOCH"]), timezone.utc)
+                     if "SOURCE_DATE_EPOCH" in os.environ else datetime.now(timezone.utc))
+        timestamp = timestamp.replace(microsecond=0)
         manifest = {
             "name": artifact_name,
             "framework": "esp-idf",
@@ -319,7 +353,7 @@ def package(args: argparse.Namespace) -> Path:
             "target": target,
             "project_path": safe_project_path(project, repo),
             "git_sha": args.git_sha,
-            "timestamp_utc": timestamp,
+            "timestamp_utc": timestamp.isoformat().replace("+00:00", "Z"),
             "baud": args.baud,
             "combined_bin": combined_file,
             "files": [
@@ -334,11 +368,45 @@ def package(args: argparse.Namespace) -> Path:
                 "<PORT>" if item == "$PORT" else item for item in command
             ),
         }
+        context_path = getattr(args, "build_context", None)
+        if context_path:
+            from releases.release_contract import config
+            cfg = config()
+            context = json.loads(Path(context_path).read_text())
+            description = json.loads((build_dir / "project_description.json").read_text())
+            if description["target"] != target or description["project_name"] != project.name:
+                raise ValueError("Build description target/project mismatch")
+            for key in ("framework_commit", "component_manager_version", "board"):
+                if context[key] != cfg[key]:
+                    raise ValueError(f"Build context mismatch: {key}")
+            if args.framework_version != cfg["framework_version"]:
+                raise ValueError("Framework version differs from release configuration")
+            roles = {str(flasher_args[k]["file"]): role for k, role in (
+                ("bootloader", "bootloader"), ("app", "app"), ("partition-table", "partition_table"))}
+            for entry in segments:
+                entry["role"] = roles.get(entry["source"], "data")
+            manifest.update(context)
+            manifest.update(schema=2, image_chip_id=32,
+                            release_version=getattr(args, "release_version", ""))
+        for entry in [*segments, *manifest["files"]]:
+            data = (package_dir / entry["file"]).read_bytes()
+            entry.update(size=len(data), sha256=hashlib.sha256(data).hexdigest())
         write_text(package_dir / "manifest.json", json.dumps(manifest, indent=2) + "\n")
         write_flash_helpers(package_dir, command, artifact_name, target)
+        if context_path:
+            readme_path = package_dir / "README.md"
+            write_text(readme_path, readme_path.read_text() +
+                       f"\nSource: `{args.git_sha}`\n\nFramework: `{args.framework_version}` "
+                       f"(`{manifest['framework_commit']}`).\n\n"
+                       f"Product version: `{manifest['release_version'] or 'development build'}`.\n\n"
+                       "Verify SHA256SUMS before flashing. See manifest.json for exact "
+                       "registry dependency versions and board-definition hashes.\n")
+        sums = "".join(f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(package_dir).as_posix()}\n"
+                       for p in sorted(package_dir.rglob("*")) if p.is_file())
+        write_text(package_dir / "SHA256SUMS", sums)
 
         zip_path = output_dir / f"{artifact_name}.zip"
-        create_zip(package_dir, zip_path)
+        create_zip(package_dir, zip_path, timestamp)
     except Exception:
         if package_dir.exists():
             shutil.rmtree(package_dir)
@@ -358,6 +426,8 @@ def main() -> int:
     parser.add_argument("--target", required=True, help="ESP-IDF target used for the build.")
     parser.add_argument("--git-sha", default="")
     parser.add_argument("--baud", default=DEFAULT_BAUD)
+    parser.add_argument("--build-context", help="release-context.json produced by scripts/build_example.py")
+    parser.add_argument("--release-version", default="", help="Release tag, e.g. v1.0.0")
     args = parser.parse_args()
 
     try:

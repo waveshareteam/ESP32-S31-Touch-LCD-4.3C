@@ -1,2 +1,0 @@
-# Second auto-amend overlay: overrides the first overlay's CONFIG value (later -c wins).
-CONFIG_BMGR_TEST_AUTO_AMEND_VALUE=8

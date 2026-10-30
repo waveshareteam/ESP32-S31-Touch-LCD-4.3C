@@ -8,8 +8,8 @@ Classic Bluetooth A2DP sink, AVRCP metadata, ES8389 speaker output, and the
 800x480 LVGL music screen, but all board hardware is initialized through
 `espressif/esp_board_manager`.
 
-The Waveshare board definition is included under
-`components/esp_boards/esp32_s31_touch_lcd_4_3c`, while
+The Waveshare board definition is loaded from
+`managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c`, while
 `main/idf_component.yml` declares only the example's direct dependencies.
 The project does not reference files outside its own directory except
 components shipped with the active ESP-IDF installation.
@@ -24,7 +24,9 @@ idf.py bmgr -b esp32_s31_touch_lcd_4_3c
 idf.py build
 ```
 
-The Board Manager command reads the local board YAML files and automatically
+First follow [Component Strategy](../../../docs/components.md#prepare-the-board-definition)
+to resolve dependencies and copy the board if missing. The Board Manager command
+reads the managed board YAML files and automatically
 generates
 `components/gen_bmgr_codes`; no generated source needs to be copied or edited
 manually.
@@ -42,8 +44,13 @@ This example involves the use of Bluetooth legacy profile A2DP for audio stream 
 The main/idf_component.yml manifest declares every direct non-project
 dependency. Bluetooth common helpers resolve from the active ESP-IDF
 installation, while Board Manager and the LVGL adapter resolve through the ESP
-Component Manager. Board Manager supplies esp_boards transitively.
+Component Manager. The main component requires `waveshare_boards`, which
+exposes Board Manager transitively.
 Project-specific audio and UI code is included under components.
+
+The A2DP helper requires `esp_codec_dev` 2.x to match the managed Board Manager
+audio API. The LVGL adapter is pinned to `0.6.0` and LVGL to `9.5.0`, matching
+the comprehensive test and LVGL porting examples.
 
 ## How to use this example
 

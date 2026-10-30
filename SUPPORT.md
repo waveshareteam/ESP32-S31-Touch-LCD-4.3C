@@ -9,16 +9,15 @@ When reporting a reproducible repository problem, include:
 
 - product name and hardware revision when known,
 - affected example or file path,
-- exact ESP-IDF preview package, tag, or commit,
+- exact ESP-IDF package, tag, or commit,
 - build and flash commands,
 - reproduction steps,
 - expected and actual behavior,
 - relevant build logs, serial output, photos, or screenshots,
 - whether the board was flashed from source or with the checked-in test image.
 
-ESP32-S31 is a preview target. A failure with a normal stable ESP-IDF release
-does not by itself indicate an example defect; first confirm that the selected
-toolchain explicitly supports `esp32s31`.
+Before diagnosing build failures, confirm that the selected toolchain
+supports `esp32s31`.
 
 This repository currently provides ESP-IDF examples only. It does not provide
 an Arduino board definition, Arduino sketches, or an Arduino CI target.

@@ -345,6 +345,7 @@ static void ui_build_locked(void)
     lv_obj_remove_flag(header, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_style_radius(header, 0, 0);
     lv_obj_set_style_border_width(header, 0, 0);
+    lv_obj_set_style_pad_all(header, 0, 0);
     lv_obj_set_style_bg_color(header, lv_color_hex(0x17202a), 0);
 
     lv_obj_t *title = ui_create_label(header, "ESP32-S31 COMPREHENSIVE TEST",
@@ -391,6 +392,8 @@ static void ui_build_locked(void)
     lv_obj_remove_flag(footer, LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_style_radius(footer, 0, 0);
     lv_obj_set_style_border_width(footer, 0, 0);
+    /* Child positions use the full 90-pixel footer, including the R bar and log. */
+    lv_obj_set_style_pad_all(footer, 0, 0);
     lv_obj_set_style_bg_color(footer, lv_color_hex(0x151b24), 0);
 
     s_mic_label = ui_create_label(footer, "MIC  L:0  R:0", lv_color_hex(0xe2e8f0), 18, 12, 220);

@@ -1,0 +1,174 @@
+name: ESP32-S31 firmware and releases
+
+"on":
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+    paths:
+      - "examples/esp-idf/**"
+      - "!examples/esp-idf/**/*.md"
+      - "scripts/**"
+      - "releases/**"
+      - "tests/**"
+      - ".github/workflows/firmware.yml"
+      - ".gitignore"
+  pull_request:
+    paths:
+      - "examples/esp-idf/**"
+      - "!examples/esp-idf/**/*.md"
+      - "scripts/**"
+      - "releases/**"
+      - "tests/**"
+      - ".github/workflows/firmware.yml"
+      - ".gitignore"
+  workflow_dispatch:
+    inputs:
+      example:
+        description: "all, an example name, or a repository-relative example path"
+        required: true
+        default: all
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firmware-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      framework_commit: ${{ steps.matrix.outputs.framework_commit }}
+      component_manager_version: ${{ steps.matrix.outputs.component_manager_version }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Test release tooling
+        run: python3 -B -m unittest discover -s tests -v
+      - name: Verify release tag and default-branch ancestry
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -B releases/publish_release.py --verify-only
+      - name: Discover selected firmware matrix
+        id: matrix
+        env:
+          SELECTOR: ${{ github.ref_type == 'tag' && 'all' || inputs.example || 'all' }}
+        run: python3 -B releases/release_contract.py --selector "$SELECTOR" --github-output "$GITHUB_OUTPUT"
+
+  build:
+    name: ${{ matrix.name }} / ESP32-S31
+    needs: gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJson(needs.gate.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: espressif/esp-idf
+          ref: ${{ needs.gate.outputs.framework_commit }}
+          path: .ci/esp-idf
+          submodules: recursive
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Install the pinned ESP-IDF toolchain
+        env:
+          IDF_TOOLS_PATH: ${{ runner.temp }}/idf-tools
+        run: |
+          echo "IDF_TOOLS_PATH=$IDF_TOOLS_PATH" >> "$GITHUB_ENV"
+          sudo apt-get update
+          sudo apt-get install -y flex bison gperf cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+          .ci/esp-idf/install.sh esp32s31
+      - name: Resolve managed board, generate board code and build
+        env:
+          EXAMPLE: ${{ matrix.name }}
+          COMPONENT_MANAGER: ${{ needs.gate.outputs.component_manager_version }}
+        shell: bash
+        run: |
+          source .ci/esp-idf/export.sh
+          python -m pip install "idf-component-manager==$COMPONENT_MANAGER"
+          set -o pipefail
+          python -B scripts/build_example.py "$EXAMPLE" 2>&1 | tee "$RUNNER_TEMP/firmware-build.log"
+      - name: Package and validate firmware
+        env:
+          EXAMPLE: ${{ matrix.name }}
+          RELEASE_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+        shell: bash
+        run: |
+          source .ci/esp-idf/export.sh
+          python -B releases/package_release.py "$EXAMPLE" --release-version "$RELEASE_VERSION"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: firmware-${{ matrix.name }}
+          path: releases/dist/*.zip
+          if-no-files-found: error
+          overwrite: true
+      - name: Upload build failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: diagnostics-${{ matrix.name }}
+          path: |
+            ${{ runner.temp }}/firmware-build.log
+            examples/esp-idf/${{ matrix.name }}/build/log/
+            examples/esp-idf/${{ matrix.name }}/build/CMakeFiles/CMakeConfigureLog.yaml
+            examples/esp-idf/${{ matrix.name }}/dependencies.lock
+          retention-days: 7
+
+  validate:
+    name: Validate complete firmware artifact set
+    needs: [gate, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: firmware-*
+          path: release-artifacts
+          merge-multiple: true
+      - name: Check exact selected matrix, image bytes, checksums and provenance
+        env:
+          SELECTOR: ${{ github.ref_type == 'tag' && 'all' || inputs.example || 'all' }}
+          RELEASE_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+        run: |
+          python3 -B releases/validate_release.py release-artifacts \
+            --commit "$GITHUB_SHA" --version "$RELEASE_VERSION" --selector "$SELECTOR"
+
+  release:
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    needs: [gate, build, validate]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: firmware-*
+          path: release-artifacts
+          merge-multiple: true
+      - name: Upload draft, verify remote digests and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -B releases/publish_release.py

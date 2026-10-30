@@ -1,4 +1,0 @@
-board: bmgr_same_name_priority
-chip: esp32s3
-version: 1.0.0
-description: "customer priority fixture"

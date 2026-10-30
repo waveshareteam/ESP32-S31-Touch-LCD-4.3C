@@ -15,21 +15,21 @@ idf.py build
 idf.py -p PORT flash monitor
 ```
 
-`idf.py set-target esp32s31` is required explicitly for `15_bluetooth_speaker`; the other projects also declare this target in their top-level `CMakeLists.txt`. The Board Manager command consumes the local board YAML files and generates `components/gen_bmgr_codes`.
+All projects declare `esp32s31` in their top-level `CMakeLists.txt`. The Board Manager command consumes the managed board YAML files and generates `components/gen_bmgr_codes`. On a fresh checkout, first resolve dependencies and, if the package lacks this board, copy the board definition as described in [Component Strategy](../../docs/components.md#prepare-the-board-definition).
 
 ## Example index
 
 | Example | Board resources used |
 | --- | --- |
-| [`1_i2c_scan`](1_i2c_scan/) | I2C master and temporary touch-controller wake-up |
-| [`2_rtc_pcf85063atl`](2_rtc_pcf85063atl/) | PCF85063ATL RTC |
-| [`3_imu_qmi8658`](3_imu_qmi8658/) | QMI8658 IMU |
-| [`4_bat_bq27220`](4_bat_bq27220/) | BQ27220 battery gauge |
-| [`5_tf_card`](5_tf_card/) | TF card filesystem and active-low card power control |
-| [`6_codec_mic_raw`](6_codec_mic_raw/) | ES8389 audio ADC |
-| [`7_codec_sd_wav_player`](7_codec_sd_wav_player/) | TF card filesystem and ES8389 audio DAC |
-| [`8_rs485`](8_rs485/) | UART1 half-duplex RS485 peripheral |
-| [`9_canfd`](9_canfd/) | ESP32-S31 TWAI/CAN-FD controller |
+| [`01_i2c_scan`](01_i2c_scan/) | I2C master and temporary touch-controller wake-up |
+| [`02_rtc_pcf85063atl`](02_rtc_pcf85063atl/) | PCF85063ATL RTC |
+| [`03_imu_qmi8658`](03_imu_qmi8658/) | QMI8658 IMU |
+| [`04_bat_bq27220`](04_bat_bq27220/) | BQ27220 battery gauge |
+| [`05_tf_card`](05_tf_card/) | TF card filesystem and active-low card power control |
+| [`06_codec_mic_raw`](06_codec_mic_raw/) | ES8389 audio ADC |
+| [`07_codec_sd_wav_player`](07_codec_sd_wav_player/) | TF card filesystem and ES8389 audio DAC |
+| [`08_rs485`](08_rs485/) | UART1 half-duplex RS485 peripheral |
+| [`09_canfd`](09_canfd/) | ESP32-S31 TWAI/CAN-FD controller |
 | [`10_usb_host`](10_usb_host/) | USB Host stack; VBUS comes from the board 5 V rail |
 | [`11_rgb_lcd`](11_rgb_lcd/) | 800 x 480 RGB LCD and backlight |
 | [`12_touch`](12_touch/) | RGB LCD, GT911 touch, and backlight |
@@ -40,7 +40,7 @@ idf.py -p PORT flash monitor
 
 ## Board integration
 
-Each project is self-contained and includes a local `components/esp_boards` snapshot. Select the `esp32_s31_touch_lcd_4_3c` board before building. Examples that require custom operations also include a small `components/s31_board_support` adapter.
+Each project declares `waveshare/waveshare_boards` in its component manifest. Select the `esp32_s31_touch_lcd_4_3c` board before building. Examples that require custom operations also include a small `components/s31_board_support` adapter.
 
 Important board controls:
 
@@ -48,4 +48,4 @@ Important board controls:
 - GPIO57 enables the speaker amplifier at a high level.
 - The board has no DVP camera. `16_usb_camera` requires an external USB UVC camera.
 
-The examples and their Board Manager migration have been statically reviewed. They have not been claimed as built, flashed, or hardware-tested by this repository update because the locally available ESP-IDF does not expose the `esp32s31` target.
+All 16 examples passed compilation with the configuration recorded in [Build Validation](../../docs/validation.md). Flashing and hardware behavior require separate validation on the board.

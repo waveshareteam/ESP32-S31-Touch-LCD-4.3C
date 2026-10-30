@@ -11,10 +11,9 @@ for the ESP32-S31-Touch-LCD-4.3C.
 | `hardware/` | Schematics and mechanical reference files |
 | `firmware/` | Checked-in test full-flash image and its usage notes |
 | `releases/` | Helpers and documentation for packaging source-built firmware artifacts |
-| `config/` | Reserved location for genuinely shared ESP-IDF configuration overlays |
 | `docs/` | Repository, component, firmware, and CI maintenance notes |
+| `docs/images/` | Product images used by repository documentation |
 | `scripts/` | Target-independent project discovery and repository helpers |
-| `assets/` | Product images used by repository documentation |
 | `.github/` | Repository checks and collaboration templates |
 
 The repository has no Arduino source tree. Do not create an empty
@@ -23,22 +22,20 @@ The repository has no Arduino source tree. Do not create an empty
 ## ESP-IDF Projects
 
 All 16 first-party projects are direct children of `examples/esp-idf/` and
-contain a project `CMakeLists.txt`. Fifteen projects explicitly set
-`IDF_TARGET esp32s31`. `15_bluetooth_speaker` currently inherits the target
-from the active ESP-IDF environment, so confirm `esp32s31` before configuring
-or building it.
+contain a project `CMakeLists.txt`. All projects explicitly set
+`IDF_TARGET esp32s31`.
 
 | Project | Purpose |
 | --- | --- |
-| `1_i2c_scan` | Scan the Board Manager-owned I2C bus |
-| `2_rtc_pcf85063atl` | PCF85063ATL real-time clock |
-| `3_imu_qmi8658` | QMI8658 motion sensor |
-| `4_bat_bq27220` | BQ27220 battery gauge |
-| `5_tf_card` | SDMMC TF-card mount, file test, and directory listing |
-| `6_codec_mic_raw` | ES8389 microphone capture and sample diagnostics |
-| `7_codec_sd_wav_player` | SD-card WAV playback through ES8389 |
-| `8_rs485` | Half-duplex RS485 communication |
-| `9_canfd` | TWAI/CAN-FD transmit and receive |
+| `01_i2c_scan` | Scan the Board Manager-owned I2C bus |
+| `02_rtc_pcf85063atl` | PCF85063ATL real-time clock |
+| `03_imu_qmi8658` | QMI8658 motion sensor |
+| `04_bat_bq27220` | BQ27220 battery gauge |
+| `05_tf_card` | SDMMC TF-card mount, file test, and directory listing |
+| `06_codec_mic_raw` | ES8389 microphone capture and sample diagnostics |
+| `07_codec_sd_wav_player` | SD-card WAV playback through ES8389 |
+| `08_rs485` | Half-duplex RS485 communication |
+| `09_canfd` | TWAI/CAN-FD transmit and receive |
 | `10_usb_host` | USB Host device discovery and descriptor logging |
 | `11_rgb_lcd` | 800 x 480 RGB LCD framebuffer and pattern tests |
 | `12_touch` | GT911 touch input and LCD drawing |
@@ -53,6 +50,9 @@ and allows an example to be configured independently.
 
 ## Board Configuration
 
+Board definitions come from the managed `waveshare/waveshare_boards` package.
+Follow [Component Strategy](components.md#prepare-the-board-definition) to
+resolve dependencies and copy the board if it is missing from the published package.
 The board identifier is `esp32_s31_touch_lcd_4_3c`. Run the following command
 from the selected project before building, especially after changing its board
 YAML files:
@@ -67,10 +67,9 @@ generated dependencies may differ.
 
 ## Toolchain Boundary
 
-ESP32-S31 is a preview target. The `esp32s31` setting in project files does not
-make an arbitrary stable ESP-IDF release support the chip. Builds and CI must
-use an explicitly supported preview package or pinned commit and record its
-exact identity. Any preview CI job should be labeled experimental.
+Builds and CI use the ESP-IDF commit recorded in
+[`releases/config.json`](../releases/config.json). The build script verifies
+the active framework commit and records its exact identity in each package.
 
 ## Firmware Boundary
 

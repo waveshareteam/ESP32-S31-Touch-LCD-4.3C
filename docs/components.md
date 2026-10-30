@@ -1,73 +1,78 @@
 # Component Strategy
 
-The examples currently keep board support local so the preview `esp32s31`
-target and board configuration travel with each independently buildable
-project.
+All 16 projects under `examples/esp-idf/` declare the managed board package in
+`main/idf_component.yml`:
 
-## Board Manager Layout
-
-Every one of the 16 projects under `examples/esp-idf/` contains a local
-`components/esp_boards` copy. Its board catalog includes
-`esp32_s31_touch_lcd_4_3c`, whose YAML files describe the board devices,
-peripherals, pins, buses, and initialization hooks used to generate code.
-
-Run this command from the selected project after changing board YAML:
-
-```text
-idf.py bmgr -b esp32_s31_touch_lcd_4_3c
+```yaml
+dependencies:
+  waveshare/waveshare_boards:
+    version: "*"
 ```
 
-The resulting `components/gen_bmgr_codes` belongs to that project. A generated
-directory from one example may have a different enabled-device set and must
-not be reused by another example.
+The main component requires `waveshare_boards`, which exposes ESP Board Manager
+as a public dependency. Projects no longer carry `components/esp_boards` copies.
+
+## Prepare the Board Definition
+
+Use an ESP-IDF installation that supports `esp32s31` and satisfies the project's
+manifest. From the selected example directory, first run:
+
+```bash
+idf.py -DIDF_TARGET=esp32s31 build
+```
+
+On a fresh checkout this resolves managed components and may fail because
+`gen_bmgr_codes` has not been generated. The published
+[`waveshare_boards`](https://github.com/waveshareteam/waveshare_boards) component
+must include `esp32_s31_touch_lcd_4_3c`. Then run:
+
+```bash
+idf.py bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py build
+```
+
+Release CI uses `scripts/build_example.py` to perform dependency resolution,
+board generation and compilation automatically. It deliberately fails when
+the published component lacks the board; there is no local board-copy fallback.
+Publish the board component before tagging a product release. Managed components,
+lockfiles, build outputs and generated board code are local build state.
+
+Run `idf.py bmgr -b esp32_s31_touch_lcd_4_3c` again after changing board YAML.
+The resulting `components/gen_bmgr_codes` belongs to that project. Generate it
+independently for each example rather than copying another example's output.
 
 ## Local S31 Adapters
 
-The following examples also contain `components/s31_board_support` for custom
-operations that are not expressed solely by the generic Board Manager device
-API:
+These examples retain `components/s31_board_support` for custom operations not
+expressed solely by the generic Board Manager device API:
 
-- `2_rtc_pcf85063atl`
-- `3_imu_qmi8658`
-- `4_bat_bq27220`
-- `9_canfd`
+- `02_rtc_pcf85063atl`
+- `03_imu_qmi8658`
+- `04_bat_bq27220`
+- `09_canfd`
 - `10_usb_host`
 - `13_comprehensive_test`
 - `16_usb_camera`
 
-Keep this adapter project-specific until its APIs and preview-target support
-are stable enough for a shared component. Do not replace it with an ESP32-S3
-BSP or copy hardware constants from another board.
+All examples resolve Board Manager through the managed board package.
+`15_bluetooth_speaker` retains application-specific A2DP and UI components.
 
-`13_comprehensive_test` additionally carries a local
-`espressif__esp_board_manager` source tree. `15_bluetooth_speaker` contains
-application-specific A2DP and UI components. These trees should not be pulled
-into unrelated examples simply because they are present in the repository.
+## Display Dependency Versions
 
-## Managed Dependencies
+The three examples that use `esp_lvgl_adapter` (`13_comprehensive_test`,
+`14_lvgl_porting`, and `15_bluetooth_speaker`) pin it to `0.6.0`.
+All examples that use LVGL pin `lvgl/lvgl` to `9.5.0`, including the USB camera
+example, which drives LVGL directly without the adapter.
 
-Example-specific managed dependencies are declared in each project's
-`main/idf_component.yml`. Treat those manifests as the dependency source of
-truth. Do not add repository-wide version claims that are not valid for every
-example or for the selected ESP32-S31 preview toolchain.
+Board Manager currently requires the `esp_codec_dev` 2.x prerelease API when
+audio support is enabled. A codec 1.x stable release cannot be substituted
+without a compatible Board Manager implementation.
 
-A successful dependency resolution or compile does not validate the board's
-pins or electrical behavior. Hardware-facing updates must also be checked
-against:
+## Validation Scope
 
-- `hardware/schematics/ESP32-S31-Touch-LCD-4.3C-Schematics.pdf`,
-- the selected project's board YAML,
-- generated Board Manager configuration,
-- project `sdkconfig.defaults`,
-- the corresponding example source and README.
+Example-specific dependencies remain in each project's `main/idf_component.yml`.
+A successful compile validates integration with the selected toolchain; pins and
+electrical behavior require the schematic under `hardware/schematics/`, the
+selected board YAML, generated configuration, and hardware tests.
 
-## Future Consolidation
-
-The repeated `esp_boards` trees are candidates for consolidation only after a
-shared component supports `esp32s31`, preserves the product board definition,
-and works with the repository's selected preview toolchain. Until then, keep
-changes synchronized across affected copies and record any intentional
-difference in the example README.
-
-There is no Arduino component surface in this repository. Bundled Arduino
-libraries or BSPs from the ESP32-S3 reference product are out of scope.
+There is no Arduino component surface in this repository.
