@@ -38,10 +38,10 @@
 1. 从 [最新 Release](https://github.com/waveshareteam/ESP32-S31-Touch-LCD-4.3C/releases/latest) 下载所需示例的固件 ZIP。
 2. 解压压缩包，准备支持 esp32s31 的 esptool 环境。
 3. 通过 USB 连接开发板。
-4. 在 Bash 中执行 `./flash.sh PORT`，或在 Windows PowerShell 中执行 `.\flash.bat PORT`，将 PORT 替换为设备端口。
+4. 在 Bash 中执行 `./flash_combined.sh PORT`，或在 Windows PowerShell 中执行 `.\flash_combined.bat PORT`，将 PORT 替换为设备端口。
 5. 如未自动启动，复位开发板，并按对应示例说明连接外设。
 
-随附的 [全 Flash 测试镜像](firmware/README_ZH.md) 位于 firmware 目录，烧录前请备份设备数据。
+出厂固件：在 [firmware](firmware/) 目录下载文件名带 `FactoryOnly` 的文件。
 
 ## 🧪 示例
 
@@ -70,7 +70,7 @@
 
 | 框架 | 版本 | 示例数 |
 | --- | --- | ---: |
-| ESP-IDF | 6.2.0-dev，提交 08e0d30a74ad0bfd5a34933142b80f45619ee410 | 16 |
+| ESP-IDF | v6.1 | 16 |
 
 源码构建步骤见 [ESP-IDF 使用说明](examples/esp-idf/README_ZH.md#构建与烧录)，首次构建需解析托管依赖并生成板级配置。
 
@@ -78,7 +78,7 @@
 
 - [原理图](hardware/schematic/)
 - [机械参考图纸及 3D 模型](hardware/mechanical/)（随附文件为 ESP32-S3 型号资料）
-- [硬件参考](docs/hardware_ZH.md)
+- [板级定义及引脚配置](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c)
 - [产品页](https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm)
 
 ## 🤝 支持

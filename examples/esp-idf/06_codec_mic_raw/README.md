@@ -12,7 +12,14 @@ Board with its two onboard microphones and a USB data cable.
 
 ## How to Run
 
-Follow the [ESP-IDF instructions](../README.md#build-and-flash) to prepare the pinned toolchain, resolve dependencies, generate this project’s board configuration, then build and flash.
+Prepare the environment using the [ESP-IDF instructions](../README.md#build-and-flash), then run these commands in this example directory and replace `PORT` with the device port.
+
+```bash
+python -m pip install esp-bmgr-assist==0.8.3
+idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py --preview build
+idf.py --preview -p PORT flash monitor
+```
 
 ## Expected Result
 
@@ -20,4 +27,4 @@ The serial monitor prints left/right peaks and the first sample pairs of each ca
 
 ## Troubleshooting
 
-Compare quiet conditions with speech near each microphone. For the guarded ES8389 32fs clock correction used by the integrated test, see [example 13](../13_comprehensive_test/).
+Compare quiet conditions with speech near each microphone. For the guarded ES8389 32fs clock correction used by the integrated test, see [example 13](../13_comprehensive_test/); the current Board Manager audio path uses esp_codec_dev 2.x APIs and cannot directly switch to the 1.x stable driver.

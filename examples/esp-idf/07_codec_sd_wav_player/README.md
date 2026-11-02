@@ -12,7 +12,14 @@ Board, USB data cable, FAT-formatted TF card and a speaker connected to the spea
 
 ## How to Run
 
-Follow the [ESP-IDF instructions](../README.md#build-and-flash) to prepare the pinned toolchain, resolve dependencies, generate this project’s board configuration, then build and flash. Copy test.wav to the card root.
+Prepare the environment using the [ESP-IDF instructions](../README.md#build-and-flash), then run these commands in this example directory and replace `PORT` with the device port.
+
+```bash
+python -m pip install esp-bmgr-assist==0.8.3
+idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py --preview build
+idf.py --preview -p PORT flash monitor
+```
 
 ## Expected Result
 

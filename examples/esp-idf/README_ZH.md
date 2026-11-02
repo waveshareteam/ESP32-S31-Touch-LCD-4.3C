@@ -6,19 +6,20 @@
 
 ## 构建与烧录
 
-使用 [构建配置](../../releases/config.json) 中固定提交的 ESP-IDF 及 Component Manager 版本，安装并导出 ESP-IDF 环境；各工程要求 IDF >=6.2。已发布的板级组件必须包含 esp32_s31_touch_lcd_4_3c。
+安装并导出 [产品配置](../../.github/product.json) 中列出的 ESP-IDF 版本，在所选示例目录执行以下命令。板级组件已固定到包含本板定义的发布版本。
 
 ```bash
-# Bash (Linux): run from the selected example directory
-idf.py --preview -DIDF_TARGET=esp32s31 reconfigure
+python -m pip install esp-bmgr-assist==0.8.3
 idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
 idf.py --preview build
 idf.py --preview -p PORT flash monitor
 ```
 
-首次 reconfigure 会下载依赖；若只因缺少 gen_bmgr_codes 或尚未选择板型而失败，继续运行 bmgr 后再 build，其他错误应先处理。将 PORT 替换为设备端口，串口监视器用 Ctrl+] 退出。
+首次运行 bmgr 会解析依赖并生成本工程的 `components/gen_bmgr_codes`；修改板级 YAML 后需重新生成，不跨示例复制生成文件。将 `PORT` 替换为设备端口，按 Ctrl+] 退出监视器。
 
-每个示例单独生成 components/gen_bmgr_codes；不要在示例之间复制该目录，修改板级 YAML 后需重新生成。引脚定义以托管 BSP 为准，[硬件参考](../../docs/hardware_ZH.md) 保留了图纸核对信息。
+引脚及器件配置以已发布的 [板级定义](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c) 为准；修改硬件相关代码前，应对照 [原理图](../../hardware/schematic/) 核实。02、03、04、09、10、13、16 示例保留产品专用适配层，15 示例保留应用专用音频及界面组件。
+
+本仓库以 GitLab 为源头，修改应向 GitLab 提交合并请求，再由镜像同步到 GitHub。
 
 ## 示例
 

@@ -12,7 +12,14 @@
 
 ## 怎么运行
 
-先按 [ESP-IDF 使用说明](../README_ZH.md#构建与烧录) 准备固定版本工具链、解析依赖并生成本示例的板级配置，然后编译烧录。
+按 [ESP-IDF 使用说明](../README_ZH.md#构建与烧录) 准备环境，在本示例目录执行以下命令，将 `PORT` 替换为设备端口。
+
+```bash
+python -m pip install esp-bmgr-assist==0.8.3
+idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py --preview build
+idf.py --preview -p PORT flash monitor
+```
 
 ## 预期现象
 

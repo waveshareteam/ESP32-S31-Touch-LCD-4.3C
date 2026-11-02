@@ -12,7 +12,14 @@ Board, USB data cable and a USB device connected to the board’s host interface
 
 ## How to Run
 
-Follow the [ESP-IDF instructions](../README.md#build-and-flash) to prepare the pinned toolchain, resolve dependencies, generate this project’s board configuration, then build and flash.
+Prepare the environment using the [ESP-IDF instructions](../README.md#build-and-flash), then run these commands in this example directory and replace `PORT` with the device port.
+
+```bash
+python -m pip install esp-bmgr-assist==0.8.3
+idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py --preview build
+idf.py --preview -p PORT flash monitor
+```
 
 ## Expected Result
 

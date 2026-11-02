@@ -8,7 +8,7 @@
     <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/waveshareteam/ESP32-S31-Touch-LCD-4.3C"></a>
   </p>
   <p>
-    <a href="https://www.waveshare.com/esp32-s31-touch-lcd-4.3c.htm">🌐 Product</a> &middot;
+    <a href="https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm">🌐 Product</a> &middot;
     <a href="https://github.com/waveshareteam/ESP32-S31-Touch-LCD-4.3C/releases/latest">📦 Firmware</a> &middot;
     <a href="examples/esp-idf/">🧩 ESP-IDF</a> &middot;
     <a href="hardware/">📚 Documentation</a>
@@ -38,10 +38,10 @@ This board combines a 4.3-inch touchscreen, dual microphones, audio output, moti
 1. Download your example’s firmware ZIP from the [latest release](https://github.com/waveshareteam/ESP32-S31-Touch-LCD-4.3C/releases/latest).
 2. Extract it and prepare an esptool environment that supports esp32s31.
 3. Connect the board over USB.
-4. In Bash run `./flash.sh PORT`, or in Windows PowerShell run `.\flash.bat PORT`, replacing PORT with the device port.
+4. In Bash run `./flash_combined.sh PORT`, or in Windows PowerShell run `.\flash_combined.bat PORT`, replacing PORT with the device port.
 5. Reset the board if needed and connect peripherals as described in the selected example.
 
-A supplied [full-flash test image](firmware/README.md) is also available in firmware; back up device data before flashing it.
+Factory firmware: download the file with `FactoryOnly` in its name from the [firmware](firmware/) directory.
 
 ## 🧪 Examples
 
@@ -70,7 +70,7 @@ A supplied [full-flash test image](firmware/README.md) is also available in firm
 
 | Framework | Version | Examples |
 | --- | --- | ---: |
-| ESP-IDF | 6.2.0-dev, commit 08e0d30a74ad0bfd5a34933142b80f45619ee410 | 16 |
+| ESP-IDF | v6.1 | 16 |
 
 For source builds, follow the [ESP-IDF instructions](examples/esp-idf/README.md#build-and-flash); resolve managed dependencies and generate the board configuration before the first build.
 
@@ -78,8 +78,8 @@ For source builds, follow the [ESP-IDF instructions](examples/esp-idf/README.md#
 
 - [Schematic](hardware/schematic/)
 - [Mechanical reference drawings and 3D model](hardware/mechanical/) (supplied files are for the ESP32-S3 model)
-- [Hardware reference](docs/hardware.md)
-- [Product page](https://www.waveshare.com/esp32-s31-touch-lcd-4.3c.htm)
+- [Board definition and pin configuration](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c)
+- [Product page](https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm)
 
 ## 🤝 Support
 

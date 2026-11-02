@@ -6,19 +6,20 @@ This directory contains 16 standalone ESP32-S31-Touch-LCD-4.3C projects using th
 
 ## Build and Flash
 
-Install and export the ESP-IDF commit and Component Manager version pinned in the [build configuration](../../releases/config.json); the projects require IDF >=6.2. The published board component must include esp32_s31_touch_lcd_4_3c.
+Install and export the ESP-IDF version listed in the [product configuration](../../.github/product.json), then run these commands in the selected example directory. The board component is pinned to a published version containing this board definition.
 
 ```bash
-# Bash (Linux): run from the selected example directory
-idf.py --preview -DIDF_TARGET=esp32s31 reconfigure
+python -m pip install esp-bmgr-assist==0.8.3
 idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
 idf.py --preview build
 idf.py --preview -p PORT flash monitor
 ```
 
-The first reconfigure downloads dependencies; if it fails only because gen_bmgr_codes is missing or no board is selected, continue with bmgr and build, otherwise resolve the reported error first. Replace PORT with the device port and press Ctrl+] to exit the monitor.
+The first bmgr invocation resolves dependencies and generates this project’s `components/gen_bmgr_codes`; regenerate after board YAML changes and keep generated output separate for each example. Replace `PORT` with the device port and press Ctrl+] to exit the monitor.
 
-Generate components/gen_bmgr_codes separately for each example and regenerate after board YAML changes. Pin definitions come from the managed BSP; the [hardware reference](../../docs/hardware.md) retains schematic cross-checks.
+Pins and device settings come from the published [board definition](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c); check the [schematic](../../hardware/schematic/) before changing hardware-related code. Examples 02, 03, 04, 09, 10, 13 and 16 retain product-specific adapters, and example 15 retains application-specific audio and UI components.
+
+GitLab is the source repository; submit merge requests there and let the mirror synchronize changes to GitHub.
 
 ## Examples
 
