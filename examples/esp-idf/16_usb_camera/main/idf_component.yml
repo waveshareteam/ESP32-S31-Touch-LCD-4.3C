@@ -1,7 +1,7 @@
 dependencies:
-  idf: ">=6.2"
+  idf: ">=6.1"
   waveshare/waveshare_boards:
-    version: "*"
+    version: "0.1.5"
   lvgl/lvgl:
     version: "9.5.0"
   espressif/usb:
