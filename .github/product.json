@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/waveshareteam/esp32-repo-template/v1/schema/product.schema.json",
   "product": "ESP32-S31-Touch-LCD-4.3C",
   "product_url": "https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm",
-  "tier": 1,
+  "tier": 2,
   "target": "esp32s31",
   "esp_idf": {
     "versions": [
