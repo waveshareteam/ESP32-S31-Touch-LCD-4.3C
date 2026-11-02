@@ -1,16 +1,17 @@
 # 固件
 
-[English](README.md)
+[English](README.md) | [简体中文](README_ZH.md)
 
-随附的全 Flash 测试镜像用于开发板评估，源码及构建说明未随该镜像提供。
+在 ESP32-S31-Touch-LCD-4.3C 开发板上实测过的出厂固件，从 `0x0` 烧录合并镜像即可恢复开箱演示。源码暂未包含在本仓库中。
 
 | 文件 | 用途 |
 | --- | --- |
-| [ESP32-S31-Touch-LCD-4.3C-Test.bin](ESP32-S31-Touch-LCD-4.3C-Test.bin) | 全 Flash 测试镜像（16 MiB） |
+| [ESP32-S31-Touch-LCD-4.3C_FactoryOnly_20261030.bin](ESP32-S31-Touch-LCD-4.3C_FactoryOnly_20261030.bin) | 出厂固件，恢复开箱演示 |
 
-该镜像不是示例 CI 构建产物，不作为 Release 附件，也未确认为出厂恢复镜像。烧录全 Flash 镜像会替换设备数据，请先备份，并使用支持 esp32s31 的烧录工具及板级烧录流程。
+在本目录使用支持 `esp32s31` 的 esptool；将 `PORT` 替换为设备端口，先备份数据，再擦除并烧录。
 
-```text
-Size:   16777216 bytes
-SHA256: 4fdafe6cf9e9b881a73603fd19983f23b2cb5b6b4dca19b3e68c9a8066b16b53
+```bash
+python -m pip install --upgrade esptool
+python -m esptool --chip esp32s31 --port PORT --no-stub erase-flash
+python -m esptool --chip esp32s31 --port PORT --no-stub write-flash 0x0 ESP32-S31-Touch-LCD-4.3C_FactoryOnly_20261030.bin
 ```
