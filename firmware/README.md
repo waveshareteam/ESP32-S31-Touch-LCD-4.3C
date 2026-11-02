@@ -1,22 +1,16 @@
-# ESP32-S31-Touch-LCD-4.3C Test Image
+# Firmware
 
-`ESP32-S31-Touch-LCD-4.3C-Test.bin` is a prebuilt 16 MiB test full-flash image
-for board-level evaluation.
+[简体中文](README_ZH.md)
+
+The supplied full-flash test image is for board evaluation; its source and build instructions are not included.
+
+| File | Purpose |
+| --- | --- |
+| [ESP32-S31-Touch-LCD-4.3C-Test.bin](ESP32-S31-Touch-LCD-4.3C-Test.bin) | Full-flash test image (16 MiB) |
+
+This image is separate from CI-built examples, is not uploaded as a Release asset, and has not been established as factory-recovery firmware. Back up device data before flashing a full-flash image and use the board-specific procedure with tools that support esp32s31.
 
 ```text
 Size:   16777216 bytes
 SHA256: 4fdafe6cf9e9b881a73603fd19983f23b2cb5b6b4dca19b3e68c9a8066b16b53
 ```
-
-This directory does not contain the image's source project or build
-instructions. The image is not built by repository CI, is not one of the
-source-maintained examples, and must not be presented as a CI-generated or
-factory-recovery artifact.
-
-Writing a full-flash image can replace the application, partition table,
-settings, and user data. Back up required data first. Use the board-specific
-procedure and a flashing toolchain that explicitly supports
-`esp32s31`.
-
-For the distinction between this image and source-built example packages, see
-`../docs/firmware.md`.
