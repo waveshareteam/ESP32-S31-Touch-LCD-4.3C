@@ -314,7 +314,7 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(len(projects()), 16)
 
     def test_workflow_has_success_gates_and_pinned_actions(self):
-        text = (ROOT / ".github/workflows/firmware.yml").read_text()
+        text = (ROOT / ".github/workflows/build.yml").read_text()
         self.assertIn("needs: [gate, build, validate]", text)
         self.assertNotIn("always()", text)
         import re

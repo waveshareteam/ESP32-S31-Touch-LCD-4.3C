@@ -8,7 +8,7 @@ not require ESP-IDF or connected hardware.
 
 ## Firmware builds and Releases
 
-`.github/workflows/firmware.yml` builds the 16 first-party ESP-IDF projects:
+`.github/workflows/build.yml` builds the 16 first-party ESP-IDF projects:
 
 - Firmware, tooling or workflow changes on `main`, `master` and pull requests
   build all projects and upload firmware ZIPs as Actions artifacts.

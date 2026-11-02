@@ -1,4 +1,4 @@
-name: ESP32-S31 firmware and releases
+name: Build
 
 "on":
   push:
@@ -10,7 +10,7 @@ name: ESP32-S31 firmware and releases
       - "scripts/**"
       - "releases/**"
       - "tests/**"
-      - ".github/workflows/firmware.yml"
+      - ".github/workflows/build.yml"
       - ".gitignore"
   pull_request:
     paths:
@@ -19,7 +19,7 @@ name: ESP32-S31 firmware and releases
       - "scripts/**"
       - "releases/**"
       - "tests/**"
-      - ".github/workflows/firmware.yml"
+      - ".github/workflows/build.yml"
       - ".gitignore"
   workflow_dispatch:
     inputs:

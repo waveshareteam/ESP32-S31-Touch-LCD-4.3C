@@ -14,21 +14,21 @@ Before the first release:
 1. Publish a `waveshare/waveshare_boards` component version containing
    `boards/esp32_s31_touch_lcd_4_3c`. Adding the board only to its Git repository
    is not sufficient; the ESP Component Registry package must include it.
-2. Commit and push the reviewed product changes to the GitHub default branch.
+2. Merge reviewed product changes into the GitLab default branch and let the configured mirror synchronize them to GitHub.
 3. Enable GitHub Actions. The workflow uses `github.token` and gives only the
    release job `contents: write`; no personal access token is needed.
 
 Create a new annotated SemVer tag on the reviewed default-branch commit.
-Ubuntu Bash (also valid in Windows PowerShell):
+Bash (Linux) (also valid in Windows PowerShell):
 
 ```bash
 git tag -a v1.0.0 -m "Release v1.0.0"
 git push origin v1.0.0
 ```
 
-Here `origin` must reach GitHub, directly or through a GitLab mirror that syncs
-tags. A tag that exists only on GitLab does not trigger GitHub Actions. After
-the tag reaches GitHub, open **Actions → ESP32-S31 firmware and releases** to follow the build, then download your example ZIP from
+Here `origin` is the primary GitLab repository; its GitHub mirror must sync
+branches and tags. A tag that exists only on GitLab does not trigger GitHub Actions. After
+the tag reaches GitHub, open **Actions → Build** to follow the build, then download your example ZIP from
 **Releases**. Do not create a public Release manually before the workflow runs.
 
 Only annotated `vMAJOR.MINOR.PATCH` tags on commits reachable from the default
@@ -51,7 +51,7 @@ Branch and pull-request builds upload Actions artifacts only. A manual
 example path; it does not create a Release.
 
 For local CI-equivalent builds, activate the configured ESP-IDF environment
-and run from the repository root (Ubuntu Bash):
+and run from the repository root (Bash (Linux)):
 
 ```bash
 python -m pip install "idf-component-manager==3.1.2"
@@ -105,16 +105,16 @@ port:
 
 ```bash
 python -m esptool --help
-./flash.sh /dev/ttyUSB0
+./flash.sh PORT
 ```
 
 On Windows, run:
 
 ```bat
-flash.bat COMx
+flash.bat PORT
 ```
 
-Generated archives are ignored by `releases/.gitignore`. The checked-in
+Generated archives are ignored by the root `.gitignore`. The checked-in
 `firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin` is a separate 16 MiB test
 full-flash image. It is not established as factory or recovery firmware, is not
 a source-built CI artifact, and this packaging script does not republish it.

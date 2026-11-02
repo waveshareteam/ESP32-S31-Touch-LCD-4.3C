@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-向 GitHub 推送附注版本标签后，工作流会编译全部 16 个 ESP-IDF 示例，
+向 GitLab 推送附注版本标签并镜像到 GitHub 后，工作流会编译全部 16 个 ESP-IDF 示例，
 校验固件包，创建 Release 草稿并上传附件；远端附件校验通过后自动公开。
 每个版本包含 **16 个固件 ZIP 和 1 个 SHA256SUMS**。
 
@@ -11,7 +11,7 @@
 1. 在 ESP Component Registry 发布包含 `esp32_s31_touch_lcd_4_3c` 的
    `waveshare/waveshare_boards` 组件版本。仅向组件 Git 仓库提交板级目录还不够，
    发布包中也必须包含它。本产品仓库不保存板级副本。
-2. 将产品仓库的源码和工作流提交到 GitHub 默认分支。
+2. 将审核后的源码和工作流合入 GitLab 默认分支，再由镜像同步到 GitHub。
 3. 在 GitHub 仓库启用 Actions。工作流使用内置 `github.token`，仅发布任务申请
    `contents: write`，无需配置个人 Token。
 
@@ -21,18 +21,18 @@
 
 ## 发布一个版本
 
-先确认当前提交已进入 GitHub 默认分支，再创建尚未使用过的附注标签。
-以下命令适用于 Ubuntu Bash，也适用于 Windows PowerShell：
+先确认当前提交已合入 GitLab 默认分支，并已镜像到 GitHub 默认分支，再创建尚未使用过的附注标签。
+以下命令适用于 Bash (Linux)，也适用于 Windows PowerShell：
 
 ```bash
 git tag -a v1.0.0 -m "Release v1.0.0"
 git push origin v1.0.0
 ```
 
-`origin` 必须指向 GitHub，或通过 GitLab 镜像把标签同步到 GitHub。
+`origin` 指向主仓库 GitLab，由配置好的镜像将分支和标签同步到 GitHub。
 如果标签只存在于 GitLab，GitHub 工作流不会启动。
 
-在 **Actions → ESP32-S31 firmware and releases** 查看进度。
+在 **Actions → Build** 查看进度。
 构建和校验全部通过后，进入 **Releases** 下载对应示例的固件 ZIP。
 GitHub 自带的 **Source code** 压缩包是源码，不是可烧录固件。
 
@@ -58,7 +58,7 @@ ESP-IDF 工具链。产品版本、ESP-IDF 提交及组件版本会分别记录�
 普通分支、PR 和手动运行只生成 Actions 附件，不会自动创建 Release。
 手动 **Run workflow** 可选择 `all`、示例名或仓库相对路径。
 
-在已激活配置中指定的 ESP-IDF 环境后，从仓库根目录执行（Ubuntu Bash）：
+在已激活配置中指定的 ESP-IDF 环境后，从仓库根目录执行（Bash (Linux)）：
 
 ```bash
 python -m pip install "idf-component-manager==3.1.2"
@@ -73,16 +73,16 @@ python releases/package_release.py 01_i2c_scan
 
 解压后的烧录命令（会写入开发板 Flash）：
 
-Ubuntu Bash：
+Bash (Linux)：
 
 ```bash
-./flash.sh /dev/ttyACM0
+./flash.sh PORT
 ```
 
 Windows PowerShell：
 
 ```powershell
-.\flash.bat COM3
+.\flash.bat PORT
 ```
 
 请使用支持 ESP32-S31 的 esptool，并替换实际串口。
