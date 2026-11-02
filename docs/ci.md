@@ -1,5 +1,7 @@
 # Continuous Integration
 
+[简体中文](ci_ZH.md)
+
 ## Repository checks
 
 `.github/workflows/repository-checks.yml` checks Python syntax, example discovery,

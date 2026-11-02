@@ -1,9 +1,11 @@
 # Security Policy
 
+[简体中文](SECURITY_ZH.md)
+
 Do not disclose a suspected vulnerability in a public issue before it has been
 triaged.
 
-Report security issues through a private channel listed on the Waveshare [support contact page](https://www.waveshare.com/contact_us) and include:
+Report security issues through a private channel listed on the Waveshare [support contact page](https://service.waveshare.com/) and include:
 
 - the ESP32-S31-Touch-LCD-4.3C product and hardware revision,
 - the affected repository path, example, or firmware artifact,

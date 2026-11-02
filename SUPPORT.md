@@ -1,5 +1,7 @@
 # Support
 
+[简体中文](SUPPORT_ZH.md)
+
 Start with the product and development links in the root `README.md`, then read
 the README for the affected project under `examples/esp-idf/`.
 
@@ -25,7 +27,7 @@ an Arduino board definition, Arduino sketches, or an Arduino CI target.
 ## Hardware And Order Support
 
 For wiring, damaged hardware, warranty, or order-specific questions, contact
-Waveshare through the official [support contact page](https://www.waveshare.com/contact_us).
+Waveshare through the official [support contact page](https://service.waveshare.com/).
 Include the product model, hardware revision, order information, and clear
 photos when relevant.
 

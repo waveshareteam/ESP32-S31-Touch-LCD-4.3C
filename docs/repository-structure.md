@@ -1,5 +1,7 @@
 # Repository Structure
 
+[简体中文](repository-structure_ZH.md)
+
 This repository contains board-specific ESP-IDF examples and support material
 for the ESP32-S31-Touch-LCD-4.3C.
 
@@ -52,7 +54,7 @@ and allows an example to be configured independently.
 
 Board definitions come from the managed `waveshare/waveshare_boards` package.
 Follow [Component Strategy](components.md#prepare-the-board-definition) to
-resolve dependencies and copy the board if it is missing from the published package.
+resolve dependencies; the published package must contain the selected board.
 The board identifier is `esp32_s31_touch_lcd_4_3c`. Run the following command
 from the selected project before building, especially after changing its board
 YAML files:

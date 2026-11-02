@@ -6,6 +6,8 @@ labels: bug
 assignees: ""
 ---
 
+[简体中文](bug_report_ZH.md)
+
 ## Product and hardware
 
 - Product: ESP32-S31-Touch-LCD-4.3C

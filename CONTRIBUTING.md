@@ -1,5 +1,7 @@
 # Contributing
 
+[简体中文](CONTRIBUTING_ZH.md)
+
 Thank you for improving the ESP32-S31-Touch-LCD-4.3C repository.
 
 ## Before You Start
@@ -28,8 +30,8 @@ documentation.
    `esp32s31`.
 5. Test hardware-facing changes on an ESP32-S31-Touch-LCD-4.3C and record the
    board revision when known.
-6. Submit a pull request with the exact validation performed and any remaining
-   limitations.
+6. Push changes to the primary GitLab repository and submit a merge request with
+   the exact validation performed and any remaining limitations. GitHub is a mirror.
 
 ## Repository Boundaries
 

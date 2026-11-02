@@ -1,3 +1,5 @@
+[简体中文](pull_request_template_ZH.md)
+
 ## Summary
 
 Describe the change and the affected example or repository paths.

@@ -1,5 +1,7 @@
 # Firmware Artifacts
 
+[简体中文](firmware_ZH.md)
+
 This repository has two distinct firmware categories. They must not be mixed in
 documentation, CI, or release uploads.
 
@@ -15,12 +17,7 @@ provided for board-level evaluation.
 - Its name does not establish it as a factory-recovery or production release
   image.
 
-Current file integrity data:
-
-```text
-Size:   16777216 bytes
-SHA256: 4fdafe6cf9e9b881a73603fd19983f23b2cb5b6b4dca19b3e68c9a8066b16b53
-```
+See the [firmware directory](../firmware/README.md) for file integrity data.
 
 A full-flash image replaces partition data and user storage as well as the
 application. Back up required device data before flashing. Use only a flashing

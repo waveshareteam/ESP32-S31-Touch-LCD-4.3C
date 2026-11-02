@@ -1,6 +1,9 @@
 # Build Validation
 
-Validation date: 2026-10-30 (Asia/Shanghai).
+[简体中文](validation_ZH.md)
+
+Historical validation date: 2026-10-30 (Asia/Shanghai). These records do not
+establish CI success for the current branch commit.
 
 All 16 ESP-IDF examples built successfully for `esp32s31` with ESP-IDF 6.2.0,
 commit `08e0d30a74ad0bfd5a34933142b80f45619ee410`, using the prepared managed board

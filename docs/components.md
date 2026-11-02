@@ -1,5 +1,7 @@
 # Component Strategy
 
+[简体中文](components_ZH.md)
+
 All 16 projects under `examples/esp-idf/` declare the managed board package in
 `main/idf_component.yml`:
 
@@ -14,32 +16,14 @@ as a public dependency. Projects no longer carry `components/esp_boards` copies.
 
 ## Prepare the Board Definition
 
-Use an ESP-IDF installation that supports `esp32s31` and satisfies the project's
-manifest. From the selected example directory, first run:
+Follow the [ESP-IDF instructions](../examples/esp-idf/README.md#build-and-flash)
+for the shared dependency-resolution, board-generation and flashing procedure.
+The published component must include esp32_s31_touch_lcd_4_3c; CI has no local
+board-copy fallback. Publish the board component before tagging a release.
 
-```bash
-idf.py -DIDF_TARGET=esp32s31 build
-```
-
-On a fresh checkout this resolves managed components and may fail because
-`gen_bmgr_codes` has not been generated. The published
-[`waveshare_boards`](https://github.com/waveshareteam/waveshare_boards) component
-must include `esp32_s31_touch_lcd_4_3c`. Then run:
-
-```bash
-idf.py bmgr -b esp32_s31_touch_lcd_4_3c
-idf.py build
-```
-
-Release CI uses `scripts/build_example.py` to perform dependency resolution,
-board generation and compilation automatically. It deliberately fails when
-the published component lacks the board; there is no local board-copy fallback.
-Publish the board component before tagging a product release. Managed components,
-lockfiles, build outputs and generated board code are local build state.
-
-Run `idf.py bmgr -b esp32_s31_touch_lcd_4_3c` again after changing board YAML.
-The resulting `components/gen_bmgr_codes` belongs to that project. Generate it
-independently for each example rather than copying another example's output.
+Regenerate components/gen_bmgr_codes after board YAML changes, separately for
+each example. Managed components, lockfiles, build outputs and generated board
+code are local build state.
 
 ## Local S31 Adapters
 
