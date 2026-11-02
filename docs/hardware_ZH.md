@@ -1,6 +1,6 @@
 # ESP32-S31-Touch-LCD-4.3C 硬件参考
 
-[English](HARDWARE_REFERENCE.md)
+[English](hardware.md)
 
 本文汇总了可由 ESP32-S31 原理图和托管组件中的 Board Manager 板级定义共同核对的信息。
 

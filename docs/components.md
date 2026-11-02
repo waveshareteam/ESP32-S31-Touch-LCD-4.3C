@@ -72,7 +72,7 @@ without a compatible Board Manager implementation.
 
 Example-specific dependencies remain in each project's `main/idf_component.yml`.
 A successful compile validates integration with the selected toolchain; pins and
-electrical behavior require the schematic under `hardware/schematics/`, the
+electrical behavior require the schematic under `hardware/schematic/`, the
 selected board YAML, generated configuration, and hardware tests.
 
 There is no Arduino component surface in this repository.

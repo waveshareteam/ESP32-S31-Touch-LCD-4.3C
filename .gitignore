@@ -21,3 +21,16 @@ releases/dist/
 releases/downloads/
 /.ci/
 /release-artifacts/
+
+**/.idea/
+.claude/
+.cursor/
+.gemini/
+.windsurf/
+.continue/
+.roo/
+.cline/
+.aider*
+/.pytest_cache/
+/release-downloads/
+/release-dist/

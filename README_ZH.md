@@ -22,7 +22,7 @@
 | 工业接口 | 半双工 RS485、CAN-FD |
 | 扩展 | USB Host 和板载扩展连接器 |
 
-经核对的引脚表、I2C 地址和资料来源见[硬件参考](HARDWARE_REFERENCE_ZH.md)，原理图与 CAD 文件位于 [`hardware/`](hardware/) 目录。
+经核对的引脚表、I2C 地址和资料来源见[硬件参考](docs/hardware_ZH.md)，原理图与 CAD 文件位于 [`hardware/`](hardware/) 目录。
 
 ## 软件支持
 

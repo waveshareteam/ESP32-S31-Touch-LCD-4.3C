@@ -22,7 +22,7 @@ This repository contains ESP-IDF examples, hardware drawings, and a full-flash t
 | Industrial interfaces | Half-duplex RS485 and CAN-FD |
 | Expansion | USB host and exposed board connectors |
 
-See [Hardware Reference](HARDWARE_REFERENCE.md) for the verified pin map, I2C addresses, and source notes. The source PDFs and CAD files are under [`hardware/`](hardware/).
+See [Hardware Reference](docs/hardware.md) for the verified pin map, I2C addresses, and source notes. The source PDFs and CAD files are under [`hardware/`](hardware/).
 
 ## Software support
 

@@ -1,6 +1,6 @@
 # ESP32-S31-Touch-LCD-4.3C Hardware Reference
 
-[简体中文](HARDWARE_REFERENCE_ZH.md)
+[简体中文](hardware_ZH.md)
 
 This reference consolidates the board settings that can be checked against the ESP32-S31 schematic and the managed Board Manager definition.
 
