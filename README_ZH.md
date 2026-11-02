@@ -80,10 +80,11 @@
 - [机械参考图纸及 3D 模型](hardware/mechanical/)（随附文件为 ESP32-S3 型号资料）
 - [板级定义及引脚配置](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c)
 - [产品页](https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm)
+- [Wiki](https://docs.waveshare.net/ESP32-S31-Touch-LCD-4.3C/)
 
 ## 🤝 支持
 
-产品使用、硬件及订单问题请联系 [微雪技术支持](https://service.waveshare.com/)。
+产品使用、硬件及订单问题请联系 [微雪技术支持](https://docs.waveshare.net/ESP32-S31-Touch-LCD-4.3C/Technical-Support/)。
 
 ## 📄 许可证
 
