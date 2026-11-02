@@ -1,9 +1,23 @@
 # USB Host
 
-Installs the USB Host stack and retains device connect/disconnect, speed,
-configuration, VID, PID and class logging. USB Host VBUS is supplied directly
-by the board 5V rail and has no GPIO enable. Startup failures release client
-tasks, host tasks and the USB stack in reverse order.
+[简体中文](README_ZH.md)
 
-Run `idf.py bmgr -b esp32_s31_touch_lcd_4_3c` from this example directory
-before building.
+## What It Does
+
+Enumerates USB devices and logs connection, disconnection and descriptor information.
+
+## Hardware Required
+
+Board, USB data cable and a USB device connected to the board’s host interface.
+
+## How to Run
+
+Follow the [ESP-IDF instructions](../README.md#build-and-flash) to prepare the pinned toolchain, resolve dependencies, generate this project’s board configuration, then build and flash.
+
+## Expected Result
+
+The serial monitor shows device speed, configuration, VID, PID and class after connection.
+
+## Troubleshooting
+
+Host VBUS comes directly from the board’s 5 V rail, so provide suitable board power. This example enumerates devices; it does not implement every USB class application.

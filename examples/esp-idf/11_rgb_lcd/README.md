@@ -1,13 +1,23 @@
 # RGB LCD
 
-Initializes managed `display_lcd` and `lcd_brightness` devices, obtains both
-RGB framebuffers and cycles the original solid, eight-color bar, checkerboard,
-gradient and geometry patterns using the generated LCD dimensions. Each pattern
-is drawn into the inactive framebuffer, synchronized from the CPU cache to
-PSRAM, and presented as a full-frame swap. This avoids modifying the buffer
-currently scanned by the RGB peripheral or presenting stale cached pixels.
+[简体中文](README_ZH.md)
 
-The framebuffer is configured in PSRAM. The board definition uses the original
-BSP's 26 MHz pixel clock and 128-byte DMA burst. Run
-`idf.py bmgr -b esp32_s31_touch_lcd_4_3c` from this example directory before
-building.
+## What It Does
+
+Draws test patterns using two RGB framebuffers in PSRAM and full-frame swaps.
+
+## Hardware Required
+
+Board with its LCD attached and a USB data cable.
+
+## How to Run
+
+Follow the [ESP-IDF instructions](../README.md#build-and-flash) to prepare the pinned toolchain, resolve dependencies, generate this project’s board configuration, then build and flash.
+
+## Expected Result
+
+The 800 × 480 screen cycles through solid colors, color bars, checkerboards, gradients and geometry.
+
+## Troubleshooting
+
+None yet.

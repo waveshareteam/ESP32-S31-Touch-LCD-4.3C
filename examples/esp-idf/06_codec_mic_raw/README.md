@@ -1,9 +1,23 @@
 # Codec Microphone Raw Capture
 
-Initializes the managed `audio_adc` device and opens its ES8389 codec handle
-for 48 kHz, 16-bit stereo input. The original peak calculation and first-sample
-logging behavior is retained.
+[简体中文](README_ZH.md)
 
-I2C and I2S ownership stays inside Board Manager. Run
-`idf.py bmgr -b esp32_s31_touch_lcd_4_3c` from this example directory before
-building.
+## What It Does
+
+Captures 48 kHz, 16-bit stereo samples through the managed ES8389 audio ADC.
+
+## Hardware Required
+
+Board with its two onboard microphones and a USB data cable.
+
+## How to Run
+
+Follow the [ESP-IDF instructions](../README.md#build-and-flash) to prepare the pinned toolchain, resolve dependencies, generate this project’s board configuration, then build and flash.
+
+## Expected Result
+
+The serial monitor prints left/right peaks and the first sample pairs of each captured block.
+
+## Troubleshooting
+
+Compare quiet conditions with speech near each microphone. For the guarded ES8389 32fs clock correction used by the integrated test, see [example 13](../13_comprehensive_test/).

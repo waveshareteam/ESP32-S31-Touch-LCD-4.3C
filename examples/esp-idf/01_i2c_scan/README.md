@@ -1,39 +1,23 @@
 # I2C Scan
 
-References the Board Manager-owned `i2c_master` bus and reads its generated
-SDA/SCL configuration. The `lcd_touch` device is initialized and released once
-to apply the GT911 reset, wake-up and address-selection sequence before scanning.
+[简体中文](README_ZH.md)
 
-The loop reports bus idle levels, timeouts, other probe errors and responding
-7-bit addresses without creating a second I2C bus. Expected devices may include:
+## What It Does
 
-- `0x14` or `0x5d` GT911 touch
-- `0x51` PCF85063ATL RTC
-- `0x6a` or `0x6b` QMI8658 IMU
-- `0x55` BQ27220 battery gauge
-- `0x10` or `0x11` ES8389 codec
+Scans the shared Board Manager I2C bus after applying the GT911 wake-up sequence.
 
-The board definition is loaded from
-`managed_components/waveshare__waveshare_boards/boards/esp32_s31_touch_lcd_4_3c`.
-See [Component Strategy](../../../docs/components.md#prepare-the-board-definition)
-for dependency resolution and the temporary board-copy step.
+## Hardware Required
 
-## Prepare the board configuration
+Board and USB data cable; no external I2C device is required.
 
-Run this command from the project directory:
+## How to Run
 
-```text
-idf.py bmgr -b esp32_s31_touch_lcd_4_3c
-```
+Follow the [ESP-IDF instructions](../README.md#build-and-flash) to prepare the pinned toolchain, resolve dependencies, generate this project’s board configuration, then build and flash.
 
-The command reads the managed board YAML files and generates
-`components/gen_bmgr_codes`. Do not copy the generated files from another
-example because its enabled device set may differ.
+## Expected Result
 
-## Build and flash
+The serial monitor lists responding 7-bit addresses and reports bus levels and probe errors.
 
-After the Board Manager command has generated the project component:
+## Troubleshooting
 
-```text
-idf.py -p PORT flash monitor
-```
+Typical addresses are touch 0x14/0x5D, RTC 0x51, IMU 0x6A/0x6B, battery gauge 0x55 and codec 0x10. The battery gauge needs a connected battery.
