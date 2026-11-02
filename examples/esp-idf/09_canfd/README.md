@@ -1,9 +1,30 @@
 # CAN-FD
 
-Acquires the custom `canfd` Board Manager device through
-`s31_board_support`, registers the receive callback and enables the managed
-TWAI-FD node. The original 16-byte counter frame and receive logging are
-retained. Unsupported targets remain in the explicit skip loop.
+[简体中文](README_ZH.md)
 
-Run `idf.py bmgr -b esp32_s31_touch_lcd_4_3c` from this example directory
-before building.
+## What It Does
+
+Sends 16-byte CAN-FD counter frames with identifier 0x123 and logs received frames.
+
+## Hardware Required
+
+Board, USB data cable and an active CAN-FD peer on a correctly terminated bus.
+
+## How to Run
+
+Prepare the environment using the [ESP-IDF instructions](../README.md#build-and-flash), then run these commands in this example directory and replace `PORT` with the device port.
+
+```bash
+python -m pip install esp-bmgr-assist==0.8.3
+idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py --preview build
+idf.py --preview -p PORT flash monitor
+```
+
+## Expected Result
+
+The serial monitor prints transmit counters and received frame identifiers, lengths and payloads.
+
+## Troubleshooting
+
+Match the managed board definition: 500 kbit/s arbitration and 2 Mbit/s data phase. A compatible active peer is needed to acknowledge frames.

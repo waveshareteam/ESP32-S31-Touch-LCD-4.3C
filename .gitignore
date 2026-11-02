@@ -1,23 +1,30 @@
-# Local environment
-.env
-.vscode/
-.codex/
-
-# Python tooling
-__pycache__/
-*.py[cod]
-
-# ESP-IDF projects
-**/build/
-**/build-*/
+**/.vscode
+**/.idea
+**/build
+**/managed_components
+**/components/gen_bmgr_codes/
+**/dependencies.lock
 **/sdkconfig
 **/sdkconfig.old
-**/managed_components/
-**/dependencies.lock
-**/components/gen_bmgr_codes/
+**/__pycache__/
+release-artifacts/
+release-downloads/
+release-dist/
 
-# Generated release outputs
-releases/dist/
-releases/downloads/
-/.ci/
-/release-artifacts/
+# Local AI coding agent state
+.claude/
+.cursor/
+.codex/
+.gemini/
+.windsurf/
+.continue/
+.roo/
+.cline/
+.aider*
+
+# Product-local environment and build directories
+.env
+**/build-*/
+*.py[cod]
+.pytest_cache/
+.ci-template/

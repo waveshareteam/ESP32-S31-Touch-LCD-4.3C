@@ -1,10 +1,30 @@
 # TF Card
 
-Initializes the managed `fs_sdcard` device, which mounts SDMMC FAT storage and
-controls its declared `sdcard_power_ctrl` dependency. The demo writes and
-reads back a test file and repeatedly lists the root directory.
+[简体中文](README_ZH.md)
 
-The board definition uses active-low GPIO56 for SD enable and 4-bit SDMMC
-mode, with D0-D3 on GPIO20-GPIO23, CLK on GPIO24 and CMD on GPIO25. Run
-`idf.py bmgr -b esp32_s31_touch_lcd_4_3c` from this example
-directory before building.
+## What It Does
+
+Mounts a TF card over 4-bit SDMMC, writes and reads a test file, and lists the root directory.
+
+## Hardware Required
+
+Board, USB data cable and a FAT-formatted TF card.
+
+## How to Run
+
+Prepare the environment using the [ESP-IDF instructions](../README.md#build-and-flash), then run these commands in this example directory and replace `PORT` with the device port.
+
+```bash
+python -m pip install esp-bmgr-assist==0.8.3
+idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py --preview build
+idf.py --preview -p PORT flash monitor
+```
+
+## Expected Result
+
+The serial monitor reports file readback and root-directory entries.
+
+## Troubleshooting
+
+Use a card with writable free space and back up important files before running this write test. Card power and the 4-bit bus are controlled by the managed board definition.

@@ -1,107 +1,90 @@
-# 微雪 ESP32-S31-Touch-LCD-4.3C
+<div align="center">
+  <h1>ESP32-S31-Touch-LCD-4.3C</h1>
+  <p><strong>ESP32-S31 4.3 英寸 800 × 480 RGB 电容触摸开发板</strong></p>
+  <p><a href="README.md">English</a> | <strong>简体中文</strong></p>
+  <p>
+    <a href="https://github.com/waveshareteam/ESP32-S31-Touch-LCD-4.3C/actions/workflows/build.yml"><img alt="Build" src="https://github.com/waveshareteam/ESP32-S31-Touch-LCD-4.3C/actions/workflows/build.yml/badge.svg"></a>
+    <a href="https://github.com/waveshareteam/ESP32-S31-Touch-LCD-4.3C/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/waveshareteam/ESP32-S31-Touch-LCD-4.3C"></a>
+    <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/waveshareteam/ESP32-S31-Touch-LCD-4.3C"></a>
+  </p>
+  <p>
+    <a href="https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm">🌐 产品</a> &middot;
+    <a href="https://github.com/waveshareteam/ESP32-S31-Touch-LCD-4.3C/releases/latest">📦 固件</a> &middot;
+    <a href="examples/esp-idf/">🧩 ESP-IDF</a> &middot;
+    <a href="hardware/">📚 资料</a>
+  </p>
+  <p><img src="docs/images/Product-1.webp" alt="ESP32-S31-Touch-LCD-4.3C development board" width="500"></p>
+</div>
 
-[English](README.md)
+---
 
-**ESP32-S31-Touch-LCD-4.3C** 是一款基于 ESP32-S31 的 4.3 英寸人机交互开发板，集成 800 x 480 电容触摸屏、音频、运动传感器、电池监测、TF 卡、RTC、RS485、CAN-FD 和 USB Host 等功能。
+## ✨ 概述
 
-本仓库提供 ESP-IDF 示例、硬件图纸以及一份全 Flash 测试固件。示例通过托管组件加载板级定义。
+本开发板集成 4.3 英寸触摸屏、双麦克风音频、运动传感器、电池监测、TF 卡、RTC 及工业通信接口，适合人机交互与外设应用开发。本仓库提供 16 个 ESP-IDF 示例、固件及硬件资料。
 
-![ESP32-S31-Touch-LCD-4.3C](docs/images/Product-1.webp)
-
-## 硬件概览
-
-| 功能 | 硬件 |
+| 功能 | 器件 / 接口 |
 | --- | --- |
 | 主控 | ESP32-S31，双核 RISC-V，最高 320 MHz |
-| 显示 | 4.3 英寸，800 x 480，16 位 RGB565 接口 |
-| 触摸 | GT911 电容触摸控制器 |
-| 音频 | ES8389 编解码器、麦克风输入和扬声器功放 |
-| 存储 | SDMMC 接口 TF 卡 |
-| 传感器 | QMI8658 IMU、BQ27220 电量计 |
-| 时钟 | PCF85063ATL RTC |
-| 工业接口 | 半双工 RS485、CAN-FD |
-| 扩展 | USB Host 和板载扩展连接器 |
+| 存储器 | 16 MB Flash、16 MB PSRAM，模组 ESP32-S31-WROOM-3-N16R16 |
+| 显示 | 4.3 英寸，800 × 480，16 位 RGB565 |
+| 触摸 | GT911，I2C 电容触摸 |
+| 音频 | ES8389、双麦克风及扬声器功放 |
+| 传感器 | QMI8658 IMU、BQ27220 电量计、PCF85063ATL RTC |
+| 外设 | 4-bit SDMMC TF 卡、RS485、CAN-FD、USB Host |
+| 板级支持 | 托管组件 waveshare/waveshare_boards |
 
-经核对的引脚表、I2C 地址和资料来源见[硬件参考](HARDWARE_REFERENCE_ZH.md)，原理图与 CAD 文件位于 [`hardware/`](hardware/) 目录。
+## 📦 快速开始
 
-## 软件支持
+1. 从 [最新 Release](https://github.com/waveshareteam/ESP32-S31-Touch-LCD-4.3C/releases/latest) 下载所需示例的固件 ZIP。
+2. 解压压缩包，准备支持 esp32s31 的 esptool 环境。
+3. 通过 USB 连接开发板。
+4. 在 Bash 中执行 `./flash_combined.sh PORT`，或在 Windows PowerShell 中执行 `.\flash_combined.bat PORT`，将 PORT 替换为设备端口。
+5. 如未自动启动，复位开发板，并按对应示例说明连接外设。
 
-仓库目前包含 **16 个 ESP-IDF 工程**，不包含 Arduino 示例。请使用支持 `esp32s31` 目标的 ESP-IDF 版本；当前示例的组件清单要求 ESP-IDF `>=6.2`。
+出厂固件：在 [firmware](firmware/) 目录下载文件名带 `FactoryOnly` 的文件。
 
-选择框架版本前，请先查看乐鑫官方的 [ESP32-S31 支持状态](https://developer.espressif.com/hardware/esp32s31/)。ESP-IDF 5.5、6.0 稳定版以及当前稳定版 Arduino-ESP32 均未提供 ESP32-S31 构建目标，因此本仓库不宣称支持这些版本。
+## 🧪 示例
 
-### 编译示例
+### ESP-IDF
 
-安装并导出兼容的 ESP-IDF 环境，然后在任一示例目录执行：
+| 示例 | 功能 |
+| --- | --- |
+| [01_i2c_scan](examples/esp-idf/01_i2c_scan/README_ZH.md) | I2C 总线扫描 |
+| [02_rtc_pcf85063atl](examples/esp-idf/02_rtc_pcf85063atl/README_ZH.md) | RTC 时间及中断 |
+| [03_imu_qmi8658](examples/esp-idf/03_imu_qmi8658/README_ZH.md) | 加速度及角速度 |
+| [04_bat_bq27220](examples/esp-idf/04_bat_bq27220/README_ZH.md) | 电池监测 |
+| [05_tf_card](examples/esp-idf/05_tf_card/README_ZH.md) | 4-bit SDMMC 文件测试 |
+| [06_codec_mic_raw](examples/esp-idf/06_codec_mic_raw/README_ZH.md) | 双声道麦克风采样 |
+| [07_codec_sd_wav_player](examples/esp-idf/07_codec_sd_wav_player/README_ZH.md) | TF 卡 WAV 播放 |
+| [08_rs485](examples/esp-idf/08_rs485/README_ZH.md) | 半双工 RS485 |
+| [09_canfd](examples/esp-idf/09_canfd/README_ZH.md) | CAN-FD 收发 |
+| [10_usb_host](examples/esp-idf/10_usb_host/README_ZH.md) | USB 设备枚举 |
+| [11_rgb_lcd](examples/esp-idf/11_rgb_lcd/README_ZH.md) | RGB LCD 测试图案 |
+| [12_touch](examples/esp-idf/12_touch/README_ZH.md) | GT911 触摸绘图 |
+| [13_comprehensive_test](examples/esp-idf/13_comprehensive_test/README_ZH.md) | 综合外设测试仪表盘 |
+| [14_lvgl_porting](examples/esp-idf/14_lvgl_porting/README_ZH.md) | LVGL 显示与触摸 |
+| [15_bluetooth_speaker](examples/esp-idf/15_bluetooth_speaker/README_ZH.md) | 蓝牙 A2DP 扬声器 |
+| [16_usb_camera](examples/esp-idf/16_usb_camera/README_ZH.md) | 外接 USB UVC 摄像头预览 |
 
-首次构建前，请按[组件准备说明](docs/components.md#prepare-the-board-definition)解析托管依赖并生成板级配置。发布的组件包需已包含 `esp32_s31_touch_lcd_4_3c`。
+## 🛠️ 开发环境
 
-```text
-cd examples/esp-idf/01_i2c_scan
-idf.py set-target esp32s31
-idf.py bmgr -b esp32_s31_touch_lcd_4_3c
-idf.py build
-idf.py -p PORT flash monitor
-```
+| 框架 | 版本 | 示例数 |
+| --- | --- | ---: |
+| ESP-IDF | v6.1 | 16 |
 
-请将 `PORT` 替换为开发板串口。`idf.py bmgr` 会读取托管组件中的 `esp32_s31_touch_lcd_4_3c` 板级定义并生成 Board Manager 初始化组件。每个示例的具体行为和硬件要求见对应 README。
+源码构建步骤见 [ESP-IDF 使用说明](examples/esp-idf/README_ZH.md#构建与烧录)，首次构建需解析托管依赖并生成板级配置。
 
-## 示例
+## 📚 资料
 
-| 序号 | 示例 | 功能 |
-| ---: | --- | --- |
-| 1 | [`01_i2c_scan`](examples/esp-idf/01_i2c_scan/) | 扫描板载 I2C 总线 |
-| 2 | [`02_rtc_pcf85063atl`](examples/esp-idf/02_rtc_pcf85063atl/) | 读写 RTC |
-| 3 | [`03_imu_qmi8658`](examples/esp-idf/03_imu_qmi8658/) | 读取加速度计和陀螺仪数据 |
-| 4 | [`04_bat_bq27220`](examples/esp-idf/04_bat_bq27220/) | 读取电量计信息 |
-| 5 | [`05_tf_card`](examples/esp-idf/05_tf_card/) | 挂载并访问 TF 卡 |
-| 6 | [`06_codec_mic_raw`](examples/esp-idf/06_codec_mic_raw/) | 通过 ES8389 采集麦克风原始数据 |
-| 7 | [`07_codec_sd_wav_player`](examples/esp-idf/07_codec_sd_wav_player/) | 播放 TF 卡中的 WAV 文件 |
-| 8 | [`08_rs485`](examples/esp-idf/08_rs485/) | 测试半双工 RS485 接口 |
-| 9 | [`09_canfd`](examples/esp-idf/09_canfd/) | 收发 CAN-FD 帧 |
-| 10 | [`10_usb_host`](examples/esp-idf/10_usb_host/) | 枚举外部 USB 设备 |
-| 11 | [`11_rgb_lcd`](examples/esp-idf/11_rgb_lcd/) | 驱动 800 x 480 RGB LCD |
-| 12 | [`12_touch`](examples/esp-idf/12_touch/) | 读取 GT911 触摸输入 |
-| 13 | [`13_comprehensive_test`](examples/esp-idf/13_comprehensive_test/) | 综合测试板载外设 |
-| 14 | [`14_lvgl_porting`](examples/esp-idf/14_lvgl_porting/) | 运行 LVGL 显示与触摸示例 |
-| 15 | [`15_bluetooth_speaker`](examples/esp-idf/15_bluetooth_speaker/) | 接收蓝牙 A2DP 音频并显示 LVGL 播放界面 |
-| 16 | [`16_usb_camera`](examples/esp-idf/16_usb_camera/) | 显示外接 USB UVC 摄像头画面 |
+- [原理图](hardware/schematic/)
+- [机械参考图纸及 3D 模型](hardware/mechanical/)（随附文件为 ESP32-S3 型号资料）
+- [板级定义及引脚配置](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c)
+- [产品页](https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm)
 
-USB 摄像头示例不代表板上集成摄像头；本板没有 DVP 摄像头接口。实现细节和迁移说明见 [ESP-IDF 示例索引](examples/esp-idf/README.md)。
+## 🤝 支持
 
-## 测试固件
+产品使用、硬件及订单问题请联系 [微雪技术支持](https://service.waveshare.com/)。
 
-[`firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin`](firmware/ESP32-S31-Touch-LCD-4.3C-Test.bin) 是仓库随附的 16 MB **全 Flash 测试镜像**。全 Flash 镜像会覆盖目标 Flash 内容，烧录前请先阅读 [`firmware/README.md`](firmware/README.md)。
+## 📄 许可证
 
-## 固件版本与 Releases
-
-向 GitHub 推送 `v主版本.次版本.补丁版本` 格式的附注标签后，自动编译全部 16 个示例，校验固件包，再发布包含 16 个 ZIP 和 `SHA256SUMS` 的 Release。Release 按正式版本发布并标记为 **Latest**。ESP32-S31 使用 [`releases/config.json`](releases/config.json) 中固定的工具链。
-
-分支和 PR 构建上传 Actions 附件；手动运行可选择单个示例，不会发布 Release。操作步骤见[发布说明](releases/README_ZH.md)。
-
-## 仓库结构
-
-```text
-docs/                仓库、组件、CI 和固件说明
-docs/images/         产品图片
-examples/esp-idf/    独立 ESP-IDF 工程
-firmware/            随仓库提供的全 Flash 测试镜像
-hardware/            原理图和机械文件
-releases/            源码构建固件的打包工具
-scripts/             示例发现与仓库检查脚本
-```
-
-更多文档：
-
-- [仓库结构](docs/repository-structure.md)
-- [组件布局](docs/components.md)
-- [固件说明](docs/firmware.md)
-- [CI 范围](docs/ci.md)
-- [编译验证记录](docs/validation.md)
-- [参与贡献](CONTRIBUTING.md)
-- [技术支持](SUPPORT.md)
-- [安全策略](SECURITY.md)
-
-## 许可证
-
-除非子目录或第三方组件另有说明，本仓库按 [Apache License 2.0](LICENSE) 发布。仓库中包含的第三方组件和媒体文件保留各自的许可证声明。
+除另有声明的第三方内容外，按 Apache License 2.0 提供，详见 [LICENSE](LICENSE)。

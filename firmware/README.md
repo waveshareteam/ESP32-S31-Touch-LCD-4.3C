@@ -1,22 +1,17 @@
-# ESP32-S31-Touch-LCD-4.3C Test Image
+# Firmware
 
-`ESP32-S31-Touch-LCD-4.3C-Test.bin` is a prebuilt 16 MiB test full-flash image
-for board-level evaluation.
+[English](README.md) | [简体中文](README_ZH.md)
 
-```text
-Size:   16777216 bytes
-SHA256: 4fdafe6cf9e9b881a73603fd19983f23b2cb5b6b4dca19b3e68c9a8066b16b53
+Factory firmware tested on the ESP32-S31-Touch-LCD-4.3C board; flash the merged image at `0x0` to restore the out-of-box demo. Its source is not yet included in this repository.
+
+| File | Purpose |
+| --- | --- |
+| [ESP32-S31-Touch-LCD-4.3C_FactoryOnly_20261030.bin](ESP32-S31-Touch-LCD-4.3C_FactoryOnly_20261030.bin) | Factory firmware, restores the out-of-box demo |
+
+From this directory, use esptool with `esp32s31` support and replace `PORT` with the device port; back up device data before erasing and flashing.
+
+```bash
+python -m pip install --upgrade esptool
+python -m esptool --chip esp32s31 --port PORT --no-stub erase-flash
+python -m esptool --chip esp32s31 --port PORT --no-stub write-flash 0x0 ESP32-S31-Touch-LCD-4.3C_FactoryOnly_20261030.bin
 ```
-
-This directory does not contain the image's source project or build
-instructions. The image is not built by repository CI, is not one of the
-source-maintained examples, and must not be presented as a CI-generated or
-factory-recovery artifact.
-
-Writing a full-flash image can replace the application, partition table,
-settings, and user data. Back up required data first. Use the board-specific
-procedure and a flashing toolchain that explicitly supports
-`esp32s31`.
-
-For the distinction between this image and source-built example packages, see
-`../docs/firmware.md`.

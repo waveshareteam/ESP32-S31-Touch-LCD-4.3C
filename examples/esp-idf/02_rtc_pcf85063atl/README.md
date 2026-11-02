@@ -1,9 +1,30 @@
 # PCF85063ATL RTC
 
-Acquires the custom Board Manager device `rtc_pcf85063` through
-`s31_board_support`. It preserves time read/set behavior, the 1 Hz timer
-interrupt and interrupt-status reporting while sharing the manager-owned I2C
-bus. The interrupt pin is declared centrally as GPIO3.
+[简体中文](README_ZH.md)
 
-Run `idf.py bmgr -b esp32_s31_touch_lcd_4_3c` from this example directory
-before building.
+## What It Does
+
+Reads the RTC and its 1 Hz timer interrupt using the managed I2C bus.
+
+## Hardware Required
+
+Board and USB data cable.
+
+## How to Run
+
+Prepare the environment using the [ESP-IDF instructions](../README.md#build-and-flash), then run these commands in this example directory and replace `PORT` with the device port.
+
+```bash
+python -m pip install esp-bmgr-assist==0.8.3
+idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py --preview build
+idf.py --preview -p PORT flash monitor
+```
+
+## Expected Result
+
+The serial monitor prints date, time, weekday, validity flag and interrupt count.
+
+## Troubleshooting
+
+If the RTC time is invalid, the example initializes it to 2026-01-01 12:00:00; this is a fallback value, not network time synchronization.

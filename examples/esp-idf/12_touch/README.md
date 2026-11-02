@@ -1,10 +1,30 @@
 # Touch
 
-Initializes managed `display_lcd`, `lcd_touch` and `lcd_brightness`
-devices. GT911 points draw colored marks on the LCD and the top-right block
-clears the page. LCD width and height come from the generated device config.
-The board definition uses 16-bit GT911 register commands, as required for
-the product ID and touch status registers.
+[简体中文](README_ZH.md)
 
-Run `idf.py bmgr -b esp32_s31_touch_lcd_4_3c` from this example directory
-before building.
+## What It Does
+
+Reads GT911 touch points and draws colored marks on the LCD.
+
+## Hardware Required
+
+Board with its LCD/touch assembly attached and a USB data cable.
+
+## How to Run
+
+Prepare the environment using the [ESP-IDF instructions](../README.md#build-and-flash), then run these commands in this example directory and replace `PORT` with the device port.
+
+```bash
+python -m pip install esp-bmgr-assist==0.8.3
+idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py --preview build
+idf.py --preview -p PORT flash monitor
+```
+
+## Expected Result
+
+Touching the screen draws marks; touching the top-right block clears the page.
+
+## Troubleshooting
+
+None yet.

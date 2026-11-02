@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/waveshareteam/esp32-repo-template/v1/schema/product.schema.json",
+  "product": "ESP32-S31-Touch-LCD-4.3C",
+  "product_url": "https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm",
+  "tier": 0,
+  "target": "esp32s31",
+  "esp_idf": {
+    "versions": [
+      "v6.1"
+    ]
+  },
+  "board_manager": {
+    "board": "esp32_s31_touch_lcd_4_3c"
+  }
+}
