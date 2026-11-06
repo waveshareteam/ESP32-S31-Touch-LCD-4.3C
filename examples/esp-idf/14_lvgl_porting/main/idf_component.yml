@@ -2,9 +2,9 @@ dependencies:
   idf:
     version: ">=6.1"
   waveshare/waveshare_boards:
-    version: "0.1.5"
+    version: "*"
   lvgl/lvgl:
     version: "9.5.0"
-  # IDF v6.1 requires the DMA API feature detection introduced in 0.6.1.
+  # Keep DMA API feature detection for ESP-IDF v6.1 compatibility.
   espressif/esp_lvgl_adapter:
-    version: "0.6.1"
+    version: "0.6.4"

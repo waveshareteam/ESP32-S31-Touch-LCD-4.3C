@@ -17,7 +17,9 @@ idf.py --preview -p PORT flash monitor
 
 首次运行 bmgr 会解析依赖并生成本工程的 `components/gen_bmgr_codes`；修改板级 YAML 后需重新生成，不跨示例复制生成文件。将 `PORT` 替换为设备端口，按 Ctrl+] 退出监视器。
 
-引脚及器件配置以已发布的 [板级定义](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c) 为准；修改硬件相关代码前，应对照 [原理图](../../hardware/schematic/) 核实。02、03、04、09、10、13、16 示例保留产品专用适配层，15 示例保留应用专用音频及界面组件。
+所有示例的 `waveshare/waveshare_boards` 均使用 `version: "*"`，依赖解析时允许选择最新兼容的已发布版本；已有依赖锁文件可能保留旧版本。
+
+引脚及器件配置以实际解析的组件为准，可参考最新的 [板级定义](https://github.com/waveshareteam/waveshare_boards/tree/main/boards/esp32_s31_touch_lcd_4_3c)；修改硬件相关代码前，应对照 [原理图](../../hardware/schematic/) 核实。02、03、04、09、10、13、16 示例保留产品专用适配层，15 示例保留应用专用音频及界面组件。
 
 本仓库以 GitLab 为源头，修改应向 GitLab 提交合并请求，再由镜像同步到 GitHub。
 

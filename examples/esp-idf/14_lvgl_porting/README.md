@@ -27,4 +27,4 @@ The LCD displays the LVGL demonstration and responds to touch input.
 
 ## Troubleshooting
 
-The manifest pins esp_lvgl_adapter to 0.6.1 for DMA API detection on ESP-IDF v6.1, with LVGL 9.5.0; check compatibility before changing these versions.
+The manifest pins esp_lvgl_adapter to 0.6.4 for DMA API detection on ESP-IDF v6.1, with LVGL 9.5.0; check compatibility before changing these versions.
