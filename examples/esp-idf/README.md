@@ -17,7 +17,9 @@ idf.py --preview -p PORT flash monitor
 
 The first bmgr invocation resolves dependencies and generates this project’s `components/gen_bmgr_codes`; regenerate after board YAML changes and keep generated output separate for each example. Replace `PORT` with the device port and press Ctrl+] to exit the monitor.
 
-Pins and device settings come from the published [board definition](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c); check the [schematic](../../hardware/schematic/) before changing hardware-related code. Examples 02, 03, 04, 09, 10, 13 and 16 retain product-specific adapters, and example 15 retains application-specific audio and UI components.
+The manifests use `version: "*"` for `waveshare/waveshare_boards`, allowing the latest compatible published version during dependency resolution. Existing dependency locks may retain an older version.
+
+Pins and device settings come from the resolved component. Refer to the latest [board definition](https://github.com/waveshareteam/waveshare_boards/tree/main/boards/esp32_s31_touch_lcd_4_3c); check the [schematic](../../hardware/schematic/) before changing hardware-related code. Examples 02, 03, 04, 09, 10, 13 and 16 retain product-specific adapters, and example 15 retains application-specific audio and UI components.
 
 GitLab is the source repository; submit merge requests there and let the mirror synchronize changes to GitHub.
 

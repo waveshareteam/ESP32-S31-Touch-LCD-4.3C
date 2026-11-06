@@ -78,7 +78,7 @@ For source builds, follow the [ESP-IDF instructions](examples/esp-idf/README.md#
 
 - [Schematic](hardware/schematic/)
 - [Mechanical reference drawings and 3D model](hardware/mechanical/) (supplied files are for the ESP32-S3 model)
-- [Board definition and pin configuration](https://github.com/waveshareteam/waveshare_boards/tree/v0.1.5/boards/esp32_s31_touch_lcd_4_3c)
+- [Board definition and pin configuration](https://github.com/waveshareteam/waveshare_boards/tree/main/boards/esp32_s31_touch_lcd_4_3c)
 - [Product page](https://www.waveshare.net/shop/ESP32-S31-Touch-LCD-4.3C.htm)
 - [Wiki (Simplified Chinese)](https://docs.waveshare.net/ESP32-S31-Touch-LCD-4.3C/)
 

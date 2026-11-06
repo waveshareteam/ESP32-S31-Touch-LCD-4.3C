@@ -27,4 +27,4 @@ LCD 显示 LVGL 演示界面并响应触摸。
 
 ## 常见问题
 
-清单固定 esp_lvgl_adapter 为 0.6.1，以支持 ESP-IDF v6.1 的 DMA API 检测，并使用 LVGL 9.5.0；修改版本前需核对兼容性。
+清单固定 esp_lvgl_adapter 为 0.6.4，以支持 ESP-IDF v6.1 的 DMA API 检测，并使用 LVGL 9.5.0；修改版本前需核对兼容性。
