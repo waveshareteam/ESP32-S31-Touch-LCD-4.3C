@@ -6,13 +6,13 @@
 
 ## 构建与烧录
 
-安装并导出 [产品配置](../../.github/product.json) 中列出的 ESP-IDF 版本，在所选示例目录执行以下命令。板级组件已固定到包含本板定义的发布版本。
+安装并导出 [产品配置](../../.github/product.json) 中列出的 ESP-IDF 版本，在所选示例目录执行以下命令。
 
 ```bash
-python -m pip install esp-bmgr-assist==0.8.3
-idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
-idf.py --preview build
-idf.py --preview -p PORT flash monitor
+python -m pip install esp-bmgr-assist
+idf.py bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py build
+idf.py -p PORT flash monitor
 ```
 
 首次运行 bmgr 会解析依赖并生成本工程的 `components/gen_bmgr_codes`；修改板级 YAML 后需重新生成，不跨示例复制生成文件。将 `PORT` 替换为设备端口，按 Ctrl+] 退出监视器。

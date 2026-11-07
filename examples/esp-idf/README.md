@@ -6,13 +6,13 @@ This directory contains 16 standalone ESP32-S31-Touch-LCD-4.3C projects using th
 
 ## Build and Flash
 
-Install and export the ESP-IDF version listed in the [product configuration](../../.github/product.json), then run these commands in the selected example directory. The board component is pinned to a published version containing this board definition.
+Install and export the ESP-IDF version listed in the [product configuration](../../.github/product.json), then run these commands in the selected example directory.
 
 ```bash
-python -m pip install esp-bmgr-assist==0.8.3
-idf.py --preview bmgr -b esp32_s31_touch_lcd_4_3c
-idf.py --preview build
-idf.py --preview -p PORT flash monitor
+python -m pip install esp-bmgr-assist
+idf.py bmgr -b esp32_s31_touch_lcd_4_3c
+idf.py build
+idf.py -p PORT flash monitor
 ```
 
 The first bmgr invocation resolves dependencies and generates this project’s `components/gen_bmgr_codes`; regenerate after board YAML changes and keep generated output separate for each example. Replace `PORT` with the device port and press Ctrl+] to exit the monitor.
